@@ -1,0 +1,204 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:Arial, Helvetica, sans-serif;
+
+    color:var(--dark);
+
+    background:var(--white);
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+ul{
+
+    list-style:none;
+
+}
+
+.container{
+
+    width:min(1200px,90%);
+
+    margin:auto;
+
+}
+
+
+:root{
+
+    /* Colors */
+
+    --primary:#C89B3C;
+    --primary-dark:#9A7425;
+
+    --dark:#1F1F1F;
+
+    --light:#F9F9F9;
+
+    --white:#FFFFFF;
+
+    --gray:#666666;
+
+    --border:#EAEAEA;
+
+    /* Layout */
+
+    --header-height:80px;
+
+    --logo-height:70px;
+
+    --transition-speed:.3s;
+
+}
+
+/* ========================================
+   GLOBAL TOAST
+======================================== */
+
+.toast {
+    position: fixed;
+
+    top: 100px;
+    right: 30px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 280px;
+
+    padding: 16px 22px;
+
+    background: var(--white);
+
+    color: var(--dark);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .15);
+
+    border-left: 4px solid var(--primary);
+
+    z-index: 99999;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateX(120%);
+
+    transition:
+        opacity .3s ease,
+        transform .3s ease,
+        visibility .3s ease;
+}
+
+
+/* SHOW TOAST */
+
+.toast.toast-show {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateX(0);
+}
+
+
+/* ICON */
+
+.toast i {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--primary);
+
+    color: var(--white);
+
+    font-size: .8rem;
+}
+
+
+/* MESSAGE */
+
+.toast span {
+    font-size: .95rem;
+
+    font-weight: 500;
+}
+
+
+/* SUCCESS */
+
+.toast.success {
+    border-left-color: #28a745;
+}
+
+.toast.success i {
+    background: #28a745;
+}
+
+
+/* ERROR */
+
+.toast.error {
+    border-left-color: #dc3545;
+}
+
+.toast.error i {
+    background: #dc3545;
+}
+
+
+/* INFO */
+
+.toast.info {
+    border-left-color: var(--primary);
+}
+
+.toast.info i {
+    background: var(--primary);
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 768px) {
+
+    .toast {
+
+        top: 90px;
+
+        right: 20px;
+        left: 20px;
+
+        min-width: auto;
+
+        width: auto;
+
+        padding: 15px 18px;
+    }
+
+}

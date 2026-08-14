@@ -1,0 +1,387 @@
+/* ==================================================
+   VELMIRA GLOBAL ANIMATIONS
+   ================================================== */
+
+
+/* ==================== PAGE FADE ==================== */
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* ==================== FADE UP ==================== */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==================== FADE DOWN ==================== */
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==================== FADE LEFT ==================== */
+
+@keyframes fadeLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* ==================== FADE RIGHT ==================== */
+
+@keyframes fadeRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* ==================== HERO IMAGE ==================== */
+
+@keyframes heroImageZoom {
+    from {
+        transform: scale(1.08);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+
+/* ==================== HERO TEXT ==================== */
+
+@keyframes heroTextReveal {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==================== PAGE ==================== */
+
+main {
+    animation: pageFadeIn 0.7s ease both;
+}
+
+
+/* ==================== HERO CONTENT ==================== */
+
+.hero h1,
+.hero h2,
+.hero p,
+.hero .btn,
+.about-hero h1,
+.about-hero p,
+.about-hero .breadcrumb,
+.contact-hero h1,
+.contact-hero p,
+.contact-hero .breadcrumb,
+.shop-header h1,
+.shop-header p,
+.shop-header .breadcrumb,
+.wishlist-header h1,
+.wishlist-header p,
+.wishlist-header .breadcrumb,
+.cart-header h1,
+.cart-header p,
+.cart-header .breadcrumb,
+.checkout-header h1,
+.checkout-header p,
+.checkout-header .breadcrumb {
+    animation: heroTextReveal 0.8s ease both;
+}
+
+
+/* ==================== HERO DELAYS ==================== */
+
+.hero p,
+.about-hero p,
+.contact-hero p,
+.shop-header p,
+.wishlist-header p,
+.cart-header p,
+.checkout-header p {
+    animation-delay: 0.15s;
+}
+
+.hero .btn {
+    animation-delay: 0.3s;
+}
+
+.hero .breadcrumb,
+.about-hero .breadcrumb,
+.contact-hero .breadcrumb,
+.shop-header .breadcrumb,
+.wishlist-header .breadcrumb,
+.cart-header .breadcrumb,
+.checkout-header .breadcrumb {
+    animation-delay: 0.3s;
+}
+
+
+/* ==================== BUTTON HOVER ==================== */
+
+button,
+.btn,
+.btn-outline,
+.checkout-btn,
+.continue-shopping,
+.continue-shopping-link {
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+
+/* ==================== BUTTON LIFT ==================== */
+
+.btn:hover,
+.btn-outline:hover,
+.checkout-btn:hover,
+.continue-shopping:hover,
+.continue-shopping-link:hover {
+    transform: translateY(-3px);
+}
+
+
+/* ==================== PRODUCT CARD ==================== */
+
+.product-card,
+.wishlist-card,
+.contact-card,
+.value-card,
+.team-card {
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+/* ==================== PRODUCT CARD HOVER ==================== */
+
+.product-card:hover,
+.wishlist-card:hover,
+.contact-card:hover,
+.value-card:hover,
+.team-card:hover {
+    transform: translateY(-8px);
+}
+
+
+/* ==================== IMAGE HOVER ==================== */
+
+.product-image img,
+.wishlist-image img,
+.about-story-image img,
+.team-card > img {
+    transition: transform 0.6s ease;
+}
+
+
+/* ==================== PRODUCT IMAGE ==================== */
+
+.product-card:hover .product-image img {
+    transform: scale(1.06);
+}
+
+
+/* ==================== WISHLIST IMAGE ==================== */
+
+.wishlist-card:hover .wishlist-image img {
+    transform: scale(1.05);
+}
+
+
+/* ==================== STORY IMAGE ==================== */
+
+.about-story-image:hover img {
+    transform: scale(1.04);
+}
+
+
+/* ==================== FOUNDER IMAGE ==================== */
+
+.team-card:hover > img {
+    transform: scale(1.03);
+}
+
+
+/* ==================== ICON HOVER ==================== */
+
+.contact-card svg,
+.value-icon,
+.team-socials a {
+    transition:
+        transform 0.3s ease,
+        color 0.3s ease,
+        background 0.3s ease;
+}
+
+.contact-card:hover svg {
+    transform: translateY(-5px);
+}
+
+.value-card:hover .value-icon {
+    transform: scale(1.08);
+}
+
+.team-socials a:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+
+/* ==================== NAVBAR ICONS ==================== */
+
+.nav-actions a,
+.nav-actions button {
+    transition:
+        transform 0.3s ease,
+        color 0.3s ease;
+}
+
+.nav-actions a:hover,
+.nav-actions button:hover {
+    transform: translateY(-2px);
+}
+
+/* ==================================================
+   SCROLL REVEAL
+   ================================================== */
+
+
+/* ==================== DEFAULT ==================== */
+
+.scroll-reveal {
+    opacity: 0;
+
+    transform: translateY(35px);
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+
+/* ==================== FROM LEFT ==================== */
+
+.scroll-reveal-left {
+    opacity: 0;
+
+    transform: translateX(-40px);
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+.scroll-reveal-left.is-visible {
+    opacity: 1;
+
+    transform: translateX(0);
+}
+
+
+/* ==================== FROM RIGHT ==================== */
+
+.scroll-reveal-right {
+    opacity: 0;
+
+    transform: translateX(40px);
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+.scroll-reveal-right.is-visible {
+    opacity: 1;
+
+    transform: translateX(0);
+}
+
+
+/* ==================== REDUCED MOTION ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .scroll-reveal,
+    .scroll-reveal-left,
+    .scroll-reveal-right {
+        opacity: 1;
+
+        transform: none;
+
+        transition: none;
+    }
+
+}
+
+/* ==================== REDUCED MOTION ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+}

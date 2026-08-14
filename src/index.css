@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+
+/* ================================
+   ROOT VARIABLES
+================================ */
+
+:root {
+
+    --primary: #C89B3C;
+    --primary-dark: #9A7425;
+
+    --dark: #1F1F1F;
+
+    --light: #F9F9F9;
+
+    --white: #FFFFFF;
+
+    --gray: #666666;
+
+    --border: #EAEAEA;
+
+    --header-height: 80px;
+    --logo-height: 60px;
+
+    --section-padding: 100px;
+
+    --transition-speed: .3s;
+}
+
+
+/* ================================
+   RESET
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ================================
+   BODY
+================================ */
+
+body {
+
+    margin: 0;
+
+    font-family: "Inter", sans-serif;
+
+    color: var(--dark);
+
+    background: var(--white);
+
+}
+
+
+/* ================================
+   ROOT
+================================ */
+
+#root {
+
+    width: 100%;
+
+    max-width: none;
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ================================
+   GLOBAL ELEMENTS
+================================ */
+
+a {
+
+    text-decoration: none;
+
+    color: inherit;
+
+}
+
+ul {
+
+    list-style: none;
+
+}
+
+button {
+
+    font-family: inherit;
+
+}
+
+
+/* ================================
+   CONTAINER
+================================ */
+
+.container {
+
+    width: min(1200px, 90%);
+
+    margin: auto;
+
+}
+
+
+/* ================================
+   HEADINGS
+================================ */
+
+h1,
+h2,
+h3 {
+
+    color: var(--dark);
+
+}
+
+h1,
+h2 {
+
+    font-family: "Playfair Display", serif;
+
+}

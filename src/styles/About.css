@@ -1,0 +1,1010 @@
+/* ==================== ABOUT PAGE ==================== */
+
+.about-page {
+    background: var(--white);
+}
+
+
+/* ==================== ABOUT HERO ==================== */
+
+.about-hero {
+    position: relative;
+
+    min-height: 500px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    color: var(--white);
+
+    text-align: center;
+}
+
+
+/* ==================== ABOUT HERO IMAGE ==================== */
+
+.about-hero-image {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+
+    z-index: 0;
+}
+
+
+/* ==================== ABOUT HERO OVERLAY ==================== */
+
+.about-hero-overlay {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    z-index: 1;
+}
+
+
+/* ==================== ABOUT HERO CONTENT ==================== */
+
+.about-hero-content {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.about-hero h1 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 3.5rem;
+
+    color: var(--white);
+
+    margin-bottom: 15px;
+}
+
+
+.about-hero p {
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    line-height: 1.8;
+
+    color: rgba(255, 255, 255, .9);
+}
+
+
+/* ==================== BREADCRUMB ==================== */
+
+.about-hero .breadcrumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 25px;
+}
+
+
+.about-hero .breadcrumb a {
+    color: var(--primary);
+
+    text-decoration: none;
+}
+
+
+.about-hero .breadcrumb span {
+    color: rgba(255, 255, 255, .8);
+
+    margin: 0 6px;
+}
+
+/* ==================== BREADCRUMB ==================== */
+
+.about-hero .breadcrumb {
+    margin-top: 25px;
+}
+
+.about-hero .breadcrumb a {
+    color: var(--primary);
+}
+
+.about-hero .breadcrumb span {
+    margin: 0 6px;
+}
+
+
+/* ==================== OUR STORY ==================== */
+
+.about-story {
+    padding: var(--section-padding) 0;
+}
+
+.about-story-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+
+    gap: 70px;
+}
+
+
+/* ==================== STORY IMAGE ==================== */
+
+.about-story-image {
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.about-story-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==================== STORY CONTENT ==================== */
+
+.about-story-content {
+    padding: 20px 0;
+}
+
+.about-tag {
+    display: inline-block;
+
+    margin-bottom: 15px;
+
+    color: var(--primary);
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+}
+
+.about-story-content h2 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 3rem;
+
+    line-height: 1.2;
+
+    color: var(--dark);
+
+    margin-bottom: 25px;
+}
+
+.about-story-content p {
+    color: var(--gray);
+
+    line-height: 1.8;
+
+    margin-bottom: 18px;
+}
+
+
+/* ==================== VALUES ==================== */
+
+.about-values {
+    padding: var(--section-padding) 0;
+
+    background: var(--light);
+}
+
+.section-title {
+    text-align: center;
+
+    margin-bottom: 60px;
+}
+
+.section-title h2 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 2.5rem;
+
+    color: var(--dark);
+
+    margin-bottom: 10px;
+}
+
+.section-title p {
+    color: var(--gray);
+}
+
+
+/* ==================== VALUES GRID ==================== */
+
+.values-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 30px;
+}
+
+
+/* ==================== VALUE CARD ==================== */
+
+.value-card {
+    padding: 35px 25px;
+
+    background: var(--white);
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    transition: .35s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, .08);
+}
+
+
+/* ==================== VALUE ICON ==================== */
+
+.value-icon {
+    width: 70px;
+
+    height: 70px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(200, 155, 60, .12);
+
+    color: var(--primary);
+
+    font-size: 1.7rem;
+}
+
+
+/* ==================== VALUE TEXT ==================== */
+
+.value-card h3 {
+    color: var(--dark);
+
+    font-size: 1.2rem;
+
+    margin-bottom: 12px;
+}
+
+.value-card p {
+    color: var(--gray);
+
+    font-size: .95rem;
+
+    line-height: 1.7;
+}
+
+
+/* ==================== MEET THE FOUNDER ==================== */
+
+.founder-section {
+    padding: var(--section-padding) 0;
+
+    background: var(--white);
+}
+
+
+/* ==================== SECTION TITLE ==================== */
+
+.founder-section .section-title {
+    text-align: center;
+
+    max-width: 750px;
+
+    margin: 0 auto 50px;
+}
+
+.founder-section .section-title h2 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 2.8rem;
+
+    color: var(--dark);
+
+    margin-bottom: 15px;
+}
+
+.founder-section .section-title p {
+    color: var(--gray);
+
+    line-height: 1.8;
+}
+
+
+/* ==================== TEAM GRID ==================== */
+
+.team-grid {
+    display: grid;
+
+    grid-template-columns: minmax(280px, 900px);
+
+    justify-content: center;
+}
+
+
+/* ==================== TEAM CARD ==================== */
+
+.team-card {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    background: var(--light);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    text-align: left;
+
+    transition: .35s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, .08);
+}
+
+
+/* ==================== FOUNDER IMAGE ==================== */
+
+.team-card > img {
+    width: 100%;
+
+    height: 100%;
+
+    min-height: 460px;
+
+    display: block;
+
+    object-fit: cover;
+
+    object-position: center;
+}
+
+
+/* ==================== TEAM INFO ==================== */
+
+.team-info {
+    padding: 50px 40px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.team-info h3 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 2rem;
+
+    color: var(--dark);
+
+    margin-bottom: 8px;
+}
+
+.team-info span {
+    display: block;
+
+    color: var(--primary);
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    margin-bottom: 25px;
+}
+
+.team-info p {
+    color: var(--gray);
+
+    line-height: 1.8;
+
+    margin-bottom: 0;
+}
+
+
+/* ==================== SOCIALS ==================== */
+
+.team-socials {
+    display: flex;
+
+    justify-content: flex-start;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+.team-socials a {
+    width: 45px;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--primary);
+
+    color: var(--white);
+
+    transition: .3s ease;
+}
+
+.team-socials a:hover {
+    background: var(--primary-dark);
+
+    color: var(--white);
+
+    transform: translateY(-3px);
+}
+
+
+/* ==================== MOBILE ==================== */
+
+@media (max-width: 768px) {
+
+    .founder-section {
+        padding: 70px 0;
+    }
+
+    .founder-section .section-title h2 {
+        font-size: 2.2rem;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .team-card {
+        grid-template-columns: 1fr;
+
+        text-align: center;
+    }
+
+    .team-card > img {
+        width: 100%;
+
+        height: auto;
+
+        min-height: 0;
+
+        object-fit: contain;
+    }
+
+    .team-info {
+        padding: 30px 25px;
+    }
+
+    .team-info h3 {
+        font-size: 1.7rem;
+    }
+
+    .team-socials {
+        justify-content: center;
+    }
+
+}
+
+/* ==================== STYLE CTA ==================== */
+
+.style-cta {
+    position: relative;
+
+    min-height: 450px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    color: var(--white);
+
+    text-align: center;
+}
+
+
+/* ==================== CTA IMAGE ==================== */
+
+.style-cta-image {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    z-index: 0;
+}
+
+
+/* ==================== CTA OVERLAY ==================== */
+
+.style-cta-overlay {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    z-index: 1;
+}
+
+
+/* ==================== CTA CONTENT ==================== */
+
+.style-cta-content {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ==================== CTA CONTENT ==================== */
+
+.style-cta h2 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 3rem;
+
+    color: var(--white);
+
+    margin-bottom: 20px;
+}
+
+.style-cta p {
+    max-width: 650px;
+
+    margin: 0 auto 30px;
+
+    line-height: 1.8;
+
+    color: rgba(255, 255, 255, .9);
+}
+
+/* ==================== CTA BUTTONS ==================== */
+
+.cta-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+/* ==================== SHOP BUTTON ==================== */
+
+.cta-buttons .btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 13px 28px;
+
+    background: var(--primary);
+
+    color: var(--white);
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    transition: .35s ease;
+}
+
+.cta-buttons .btn:hover {
+    background: var(--primary-dark);
+
+    transform: translateY(-3px);
+}
+
+
+/* ==================== CONTACT BUTTON ==================== */
+
+.cta-buttons .btn-outline {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 13px 28px;
+
+    border: 2px solid var(--white);
+
+    color: var(--white);
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    transition: .35s ease;
+}
+
+.cta-buttons .btn-outline:hover {
+    background: var(--white);
+
+    color: var(--dark);
+
+    transform: translateY(-3px);
+}
+
+
+/* ==================== MOBILE ==================== */
+
+@media (max-width: 768px) {
+
+    .founder-section {
+        padding: 70px 0;
+    }
+
+    .founder-section .section-title h2 {
+        font-size: 2.2rem;
+    }
+
+    .team-info {
+        padding: 25px 20px;
+    }
+
+    .style-cta {
+        padding: 75px 20px;
+    }
+
+    .style-cta h2 {
+        font-size: 2.2rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    .cta-buttons .btn,
+    .cta-buttons .btn-outline {
+        width: 100%;
+
+        max-width: 250px;
+    }
+
+}
+
+
+/* ==================== TABLET ==================== */
+
+@media (max-width: 992px) {
+
+    .about-story-grid {
+        gap: 40px;
+    }
+
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .about-story-content h2 {
+        font-size: 2.5rem;
+    }
+
+}
+
+
+/* ==================== MOBILE ==================== */
+
+@media (max-width: 768px) {
+
+    .about-hero {
+        padding: 80px 0 60px;
+    }
+
+    .about-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .about-story {
+        padding: 60px 0;
+    }
+
+    .about-story-grid {
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+    }
+
+    .about-story-content {
+        text-align: center;
+    }
+
+    .about-story-content h2 {
+        font-size: 2.3rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-values {
+        padding: 60px 0;
+    }
+
+    .section-title h2 {
+        font-size: 2.2rem;
+    }
+
+    .style-cta {
+        padding: 70px 0;
+    }
+
+    .style-cta h2 {
+        font-size: 2.3rem;
+    }
+
+}
+
+/* =========================================================
+   ABOUT PAGE ANIMATIONS
+   ========================================================= */
+
+/* ==================== PAGE ==================== */
+
+.about-page {
+    animation: aboutFade 0.7s ease both;
+}
+
+@keyframes aboutFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* ==================== HERO ==================== */
+
+.about-hero-content {
+    animation: aboutHeroContent 0.9s ease both;
+}
+
+@keyframes aboutHeroContent {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==================== HERO IMAGE ==================== */
+
+.about-hero-image {
+    animation: aboutHeroImage 1.2s ease both;
+}
+
+@keyframes aboutHeroImage {
+    from {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* ==================== STORY ==================== */
+
+.about-story-image {
+    animation: aboutStoryImage 0.8s ease both;
+}
+
+@keyframes aboutStoryImage {
+    from {
+        opacity: 0;
+        transform: translateX(-35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.about-story-content {
+    animation: aboutStoryContent 0.8s ease 0.15s both;
+}
+
+@keyframes aboutStoryContent {
+    from {
+        opacity: 0;
+        transform: translateX(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* ==================== VALUE CARDS ==================== */
+
+.value-card {
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-10px);
+
+    box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.10);
+}
+
+.value-icon {
+    transition:
+        transform 0.35s ease;
+}
+
+.value-card:hover .value-icon {
+    transform: scale(1.12);
+}
+
+
+/* ==================== FOUNDER ==================== */
+
+.team-card {
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.12);
+}
+
+.team-card img {
+    transition: transform 0.5s ease;
+}
+
+.team-card:hover img {
+    transform: scale(1.03);
+}
+
+
+/* ==================== SOCIAL ICONS ==================== */
+
+.team-socials a {
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+}
+
+.team-socials a:hover {
+    transform: translateY(-5px);
+}
+
+
+/* ==================== CTA ==================== */
+
+.style-cta-content {
+    animation: aboutCta 0.9s ease both;
+}
+
+@keyframes aboutCta {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.style-cta-image {
+    transition: transform 1s ease;
+}
+
+.style-cta:hover .style-cta-image {
+    transform: scale(1.03);
+}
+
+
+/* ==================== CTA BUTTONS ==================== */
+
+.cta-buttons .btn,
+.cta-buttons .btn-outline {
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.cta-buttons .btn:hover,
+.cta-buttons .btn-outline:hover {
+    transform: translateY(-3px);
+}

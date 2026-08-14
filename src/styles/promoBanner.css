@@ -1,0 +1,201 @@
+/* ==================== PROMO BANNER ==================== */
+
+.promo-banner {
+
+    padding: var(--section-padding) 0;
+
+    background: var(--light);
+
+}
+
+
+/* ==================== CONTENT ==================== */
+
+.promo-content {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+
+    gap: 60px;
+
+}
+
+
+/* ==================== TEXT ==================== */
+
+.promo-text {
+
+    padding: 20px 0;
+
+}
+
+
+.promo-text .tag {
+
+    display: inline-block;
+
+    margin-bottom: 15px;
+
+    color: var(--primary);
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.promo-text h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 3rem;
+
+    line-height: 1.2;
+
+    color: var(--dark);
+
+    margin-bottom: 20px;
+
+}
+
+
+.promo-text p {
+
+    max-width: 520px;
+
+    color: var(--gray);
+
+    line-height: 1.8;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* ==================== BUTTON ==================== */
+
+.promo-text .btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 13px 28px;
+
+    background: var(--primary);
+
+    color: var(--white);
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    transition: .35s ease;
+
+}
+
+
+.promo-text .btn:hover {
+
+    background: var(--primary-dark);
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 12px 25px rgba(200,155,60,.3);
+
+}
+
+
+/* ==================== IMAGE ==================== */
+
+.promo-image {
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+}
+
+
+.promo-image img {
+
+    width: 100%;
+
+    height: 450px;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: .6s ease;
+
+}
+
+/* ==================== TABLET ==================== */
+
+@media (max-width: 992px) {
+
+    .promo-content {
+
+        gap: 40px;
+
+    }
+
+    .promo-text h2 {
+
+        font-size: 2.5rem;
+
+    }
+
+}
+
+
+/* ==================== MOBILE ==================== */
+
+@media (max-width: 768px) {
+
+    .promo-content {
+
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+
+    }
+
+    .promo-text {
+
+        text-align: center;
+
+    }
+
+    .promo-text p {
+
+        margin-left: auto;
+
+        margin-right: auto;
+
+    }
+
+    .promo-image {
+
+        order: 2;
+
+    }
+
+    .promo-image img {
+
+        height: 350px;
+
+    }
+
+}

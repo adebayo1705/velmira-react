@@ -1,0 +1,172 @@
+/* ========================================
+   VELMIRA GLOBAL TOAST
+======================================== */
+
+.velmira-toast {
+
+    position: fixed;
+
+    top: 100px;
+    right: 30px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 280px;
+
+    padding: 15px 20px;
+
+    background: var(--white);
+
+    color: var(--dark);
+
+    border-radius: 12px;
+
+    border-left: 4px solid var(--primary);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.15);
+
+    z-index: 999999;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateX(120%);
+
+    transition:
+        opacity .3s ease,
+        transform .3s ease,
+        visibility .3s ease;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   SHOW
+========================= */
+
+.velmira-toast.velmira-toast-show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateX(0);
+}
+
+
+/* =========================
+   ICON
+========================= */
+
+.velmira-toast-icon {
+
+    width: 28px;
+    height: 28px;
+
+    min-width: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #28a745;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.velmira-toast span {
+
+    font-size: .95rem;
+
+    font-weight: 500;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   SUCCESS
+========================= */
+
+.velmira-toast.success {
+
+    border-left-color: #28a745;
+}
+
+.velmira-toast.success
+.velmira-toast-icon {
+
+    background: #28a745;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.velmira-toast.error {
+
+    border-left-color: #dc3545;
+}
+
+.velmira-toast.error
+.velmira-toast-icon {
+
+    background: #dc3545;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.velmira-toast.info {
+
+    border-left-color: var(--primary);
+}
+
+.velmira-toast.info
+.velmira-toast-icon {
+
+    background: var(--primary);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .velmira-toast {
+
+        top: 90px;
+
+        left: 20px;
+        right: 20px;
+
+        width: auto;
+
+        min-width: 0;
+
+    }
+
+}
