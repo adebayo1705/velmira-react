@@ -19,7 +19,7 @@ import ScrollReveal from "../components/ui/ScrollReveal";
 
 import searchProducts from "../data/searchProducts";
 
-import "../styles/contact.css";
+import "../styles/Contact.css";
 
 function Contact() {
 
