@@ -8,7 +8,7 @@ import {
 
 import ProductCard from "../products/ProductCard";
 
-import "../../styles/SearchOverlay.css";
+import "../../styles/searchOverlay.css";
 
 
 function SearchOverlay({
