@@ -75,9 +75,7 @@ function App() {
 
   return (
 
-    <BrowserRouter
-      basename="/velmira-react"
-    >
+    <BrowserRouter>
 
       <ScrollToTop />
 
