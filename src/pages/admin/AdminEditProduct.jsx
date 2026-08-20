@@ -31,7 +31,7 @@ function AdminEditProduct() {
         setError("");
 
         const response = await fetch(
-          `http://localhost:5000/api/products/${id}`
+          `https://velmira-backend.onrender.com/api/products/${id}`
         );
 
         const data = await response.json();
@@ -86,7 +86,7 @@ function AdminEditProduct() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${id}`,
+        `https://velmira-backend.onrender.com/api/products/${id}`,
         {
           method: "PUT",
 

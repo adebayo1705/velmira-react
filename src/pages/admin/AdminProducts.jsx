@@ -20,7 +20,7 @@ function AdminProducts() {
   const fetchProducts = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/products"
+        "https://velmira-backend.onrender.com/api/products"
       );
 
       if (!response.ok) {
@@ -79,7 +79,7 @@ function AdminProducts() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${productToDelete._id}`,
+        `https://velmira-backend.onrender.com/api/products/${productToDelete._id}`,
         {
           method: "DELETE",
         }

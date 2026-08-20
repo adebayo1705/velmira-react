@@ -40,7 +40,7 @@ const fetchStats = async () => {
     // ============================
 
     const response = await fetch(
-      "http://localhost:5000/api/admin/stats",
+      "https://velmira-backend.onrender.com/api/admin/stats",
       {
         headers: {
           Authorization: `Bearer ${token}`

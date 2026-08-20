@@ -30,8 +30,8 @@ function AdminUsers() {
 
       const [usersResponse, ordersResponse] =
         await Promise.all([
-          fetch("http://localhost:5000/api/users"),
-          fetch("http://localhost:5000/api/orders"),
+          fetch("https://velmira-backend.onrender.com/api/users"),
+          fetch("https://velmira-backend.onrender.com/api/orders"),
         ]);
 
       const usersData = await usersResponse.json();
@@ -166,7 +166,7 @@ function AdminUsers() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/${customerToDelete._id}`,
+        `https://velmira-backend.onrender.com/api/users/${customerToDelete._id}`,
         {
           method: "DELETE",
         }
