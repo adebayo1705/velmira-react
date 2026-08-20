@@ -2,21 +2,11 @@ import "../../styles/featured.css";
 
 import { useToast } from "../../context/ToastContext";
 
-import {
-  FaHeart,
-  FaCartShopping,
-  FaStar,
-} from "react-icons/fa6";
+import { getProductImage } from "../../utils/productImages";
 
-function ProductCard({
-  id,
-  image,
-  name,
-  category,
-  price,
-  badge,
-  rating,
-}) {
+import { FaHeart, FaCartShopping, FaStar } from "react-icons/fa6";
+
+function ProductCard({ id, image, name, category, price, badge, rating }) {
   const { showToast } = useToast();
 
   // ============================
@@ -35,12 +25,9 @@ function ProductCard({
       quantity: 1,
     };
 
-    const existingCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const existingProduct = existingCart.find(
-      (item) => item.id === id
-    );
+    const existingProduct = existingCart.find((item) => item.id === id);
 
     let updatedCart;
 
@@ -51,34 +38,20 @@ function ProductCard({
               ...item,
               quantity: Number(item.quantity || 0) + 1,
             }
-          : item
+          : item,
       );
 
-      showToast(
-        `${name} quantity increased in cart`,
-        "success"
-      );
+      showToast(`${name} quantity increased in cart`, "success");
     } else {
-      updatedCart = [
-        ...existingCart,
-        product,
-      ];
+      updatedCart = [...existingCart, product];
 
-      showToast(
-        `${name} added to cart`,
-        "success"
-      );
+      showToast(`${name} added to cart`, "success");
     }
 
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(updatedCart)
-    );
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
 
     // Update navbar cart count
-    window.dispatchEvent(
-      new Event("cartUpdated")
-    );
+    window.dispatchEvent(new Event("cartUpdated"));
   };
 
   // ============================
@@ -96,106 +69,60 @@ function ProductCard({
       rating,
     };
 
-    const existingWishlist =
-      JSON.parse(
-        localStorage.getItem("wishlist")
-      ) || [];
+    const existingWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-    const alreadyExists =
-      existingWishlist.some(
-        (item) => item.id === id
-      );
+    const alreadyExists = existingWishlist.some((item) => item.id === id);
 
     if (alreadyExists) {
-      showToast(
-        `${name} is already in your wishlist`,
-        "error"
-      );
+      showToast(`${name} is already in your wishlist`, "error");
 
       return;
     }
 
-    const updatedWishlist = [
-      ...existingWishlist,
-      product,
-    ];
+    const updatedWishlist = [...existingWishlist, product];
 
-    localStorage.setItem(
-      "wishlist",
-      JSON.stringify(updatedWishlist)
-    );
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
 
-    showToast(
-      `${name} added to wishlist`,
-      "success"
-    );
+    showToast(`${name} added to wishlist`, "success");
   };
 
   return (
     <div className="product-card">
-
       {/* ==================== PRODUCT IMAGE ==================== */}
 
       <div className="product-image">
+        <img src={getProductImage(image)} alt={name} />
 
-        <img
-          src={image}
-          alt={name}
-        />
-
-        {badge && (
-          <span className="badge">
-            {badge}
-          </span>
-        )}
-
+        {badge && <span className="badge">{badge}</span>}
       </div>
 
       {/* ==================== PRODUCT INFO ==================== */}
 
       <div className="product-info">
+        <p className="category">{category}</p>
 
-        <p className="category">
-          {category}
-        </p>
-
-        <h3>
-          {name}
-        </h3>
+        <h3>{name}</h3>
 
         {/* ==================== RATING ==================== */}
 
         <div className="rating">
-
-          {[1, 2, 3, 4, 5].map(
-            (star) => (
-              <FaStar
-                key={star}
-                className={
-                  star <= rating
-                    ? "star-filled"
-                    : "star-empty"
-                }
-              />
-            )
-          )}
-
+          {[1, 2, 3, 4, 5].map((star) => (
+            <FaStar
+              key={star}
+              className={star <= rating ? "star-filled" : "star-empty"}
+            />
+          ))}
         </div>
 
         {/* ==================== PRICE ==================== */}
 
         <div className="price-row">
-
-          <span className="price">
-            {price}
-          </span>
-
+          <span className="price">{price}</span>
         </div>
 
         {/* ==================== BUTTONS ==================== */}
 
         <div className="product-buttons">
-
           {/* Wishlist */}
 
           <button
@@ -209,19 +136,12 @@ function ProductCard({
 
           {/* Cart */}
 
-          <button
-            type="button"
-            className="cart-btn"
-            onClick={handleAddToCart}
-          >
+          <button type="button" className="cart-btn" onClick={handleAddToCart}>
             <FaCartShopping />
             Add to Cart
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 }
