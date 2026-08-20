@@ -12,7 +12,7 @@ import founderImage from "../assets/images/founder.jpg";
 import aboutHeroImage from "../assets/images/shop-banner2.jpg";
 import ctaImage from "../assets/images/hero.png";
 
-import "../styles/about.css";
+import "../styles/About.css";
 
 function About() {
   return (
