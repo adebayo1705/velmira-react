@@ -2,6 +2,8 @@ import "../../styles/footer.css";
 
 import logo from "../../assets/images/logo.png";
 
+import { Link } from "react-router-dom";
+
 import {
   FaLocationDot,
   FaPhone,
@@ -11,24 +13,33 @@ import {
   FaWhatsapp,
 } from "react-icons/fa6";
 
+
 function Footer() {
+
   return (
+
     <footer className="footer">
 
       <div className="container footer-container">
 
-        {/* Company */}
+
+        {/* ============================
+            COMPANY
+        ============================ */}
 
         <div className="footer-column">
 
-          <a href="/home" className="logo">
+          <Link
+            to="/home"
+            className="logo"
+          >
 
             <img
               src={logo}
               alt="Velmira Logo"
             />
 
-          </a>
+          </Link>
 
           <p>
             Premium fashion products including bags,
@@ -39,28 +50,40 @@ function Footer() {
         </div>
 
 
-        {/* Quick Links */}
+        {/* ============================
+            QUICK LINKS
+        ============================ */}
 
         <div className="footer-column">
 
-          <h3>Quick Links</h3>
+          <h3>
+            Quick Links
+          </h3>
 
           <ul>
 
             <li>
-              <a href="/home">Home</a>
+              <Link to="/home">
+                Home
+              </Link>
             </li>
 
             <li>
-              <a href="shop">Shop</a>
+              <Link to="/shop">
+                Shop
+              </Link>
             </li>
 
             <li>
-              <a href="about">About</a>
+              <Link to="/about">
+                About
+              </Link>
             </li>
 
             <li>
-              <a href="contact">Contact</a>
+              <Link to="/contact">
+                Contact
+              </Link>
             </li>
 
           </ul>
@@ -68,31 +91,46 @@ function Footer() {
         </div>
 
 
-        {/* Contact */}
+        {/* ============================
+            CONTACT
+        ============================ */}
 
         <div className="footer-column footer-contact">
 
-          <h3>Contact</h3>
+          <h3>
+            Contact
+          </h3>
 
           <ul>
 
             <li>
+
               <FaLocationDot />
-              <span>Nigeria</span>
+
+              <span>
+                Nigeria
+              </span>
+
             </li>
 
             <li>
+
               <FaPhone />
+
               <a href="tel:+2348064323281">
                 +234 806 432 3281
               </a>
+
             </li>
 
             <li>
+
               <FaEnvelope />
+
               <a href="mailto:info@velmira.com">
                 info@velmira.com
               </a>
+
             </li>
 
           </ul>
@@ -100,7 +138,9 @@ function Footer() {
         </div>
 
 
-        {/* Social */}
+        {/* ============================
+            SOCIAL
+        ============================ */}
 
         <div className="footer-socials">
 
@@ -136,7 +176,9 @@ function Footer() {
       </div>
 
 
-      {/* Footer Bottom */}
+      {/* ============================
+          FOOTER BOTTOM
+      ============================ */}
 
       <div className="footer-bottom">
 
@@ -147,7 +189,10 @@ function Footer() {
       </div>
 
     </footer>
+
   );
+
 }
+
 
 export default Footer;

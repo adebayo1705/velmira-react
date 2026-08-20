@@ -4,7 +4,12 @@ import "../../styles/navbar.css";
 
 import { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
+
+import { useAuth } from "../../context/AuthContext";
+
 import SearchOverlay from "../ui/SearchOverlay";
+
+import { getProducts } from "../../api/productApi";
 
 import logo from "../../assets/images/logo.png";
 
@@ -16,30 +21,98 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 
-function Navbar({ products = [] }) {
-  console.log("Navbar products:", products);
-  console.log("Navbar product count:", products.length);
+
+function Navbar() {
+
+  const { isAuthenticated, logout } = useAuth();
+
+
+  // ============================
+  // PRODUCTS
+  // ============================
+
+  const [products, setProducts] = useState([]);
+
+
+  // ============================
+  // LOAD PRODUCTS
+  // ============================
+
+  useEffect(() => {
+
+    const loadProducts = async () => {
+
+      try {
+
+        const data = await getProducts();
+
+        console.log(
+          "NAVBAR BACKEND PRODUCTS:",
+          data
+        );
+
+        setProducts(data);
+
+      } catch (error) {
+
+        console.error(
+          "NAVBAR PRODUCT ERROR:",
+          error
+        );
+
+      }
+
+    };
+
+
+    loadProducts();
+
+  }, []);
+
+
+  console.log(
+    "Navbar product count:",
+    products.length
+  );
+
 
   // ============================
   // NAVIGATION LINKS
   // ============================
 
   const links = [
-    { name: "Home", path: "/home" },
-    { name: "Shop", path: "/shop" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    {
+      name: "Home",
+      path: "/home",
+    },
+    {
+      name: "Shop",
+      path: "/shop",
+    },
+    {
+      name: "About",
+      path: "/about",
+    },
+    {
+      name: "Contact",
+      path: "/contact",
+    },
   ];
+
 
   // ============================
   // STATES
   // ============================
 
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] =
+    useState(false);
 
-  const [cartCount, setCartCount] = useState(0);
+  const [cartCount, setCartCount] =
+    useState(0);
 
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] =
+    useState(false);
+
 
   // ============================
   // CART COUNT
@@ -50,23 +123,33 @@ function Navbar({ products = [] }) {
     const updateCartCount = () => {
 
       const cart =
-        JSON.parse(localStorage.getItem("cart")) || [];
+        JSON.parse(
+          localStorage.getItem("cart")
+        ) || [];
 
-      const totalQuantity = cart.reduce(
-        (total, item) =>
-          total + Number(item.quantity || 0),
-        0
-      );
+
+      const totalQuantity =
+        cart.reduce(
+          (total, item) =>
+            total +
+            Number(item.quantity || 0),
+          0
+        );
+
 
       setCartCount(totalQuantity);
+
     };
 
+
     updateCartCount();
+
 
     window.addEventListener(
       "cartUpdated",
       updateCartCount
     );
+
 
     return () => {
 
@@ -79,6 +162,20 @@ function Navbar({ products = [] }) {
 
   }, []);
 
+
+  // ============================
+  // LOGOUT
+  // ============================
+
+  const handleLogout = () => {
+
+    logout();
+
+    setMenuOpen(false);
+
+  };
+
+
   // ============================
   // RENDER
   // ============================
@@ -86,13 +183,19 @@ function Navbar({ products = [] }) {
   return (
     <>
 
-      {/* ==================== HEADER ==================== */}
+
+      {/* ============================
+          HEADER
+      ============================ */}
 
       <header>
 
         <div className="container nav-container">
 
-          {/* ==================== LOGO ==================== */}
+
+          {/* ============================
+              LOGO
+          ============================ */}
 
           <Link
             to="/home"
@@ -107,9 +210,16 @@ function Navbar({ products = [] }) {
           </Link>
 
 
-          {/* ==================== NAVIGATION ==================== */}
+          {/* ============================
+              NAVIGATION
+          ============================ */}
 
           <nav className="navbar">
+
+
+            {/* ============================
+                DESKTOP NAV LINKS
+            ============================ */}
 
             <ul className="nav-links">
 
@@ -120,7 +230,9 @@ function Navbar({ products = [] }) {
                   <NavLink
                     to={link.path}
                     className={({ isActive }) =>
-                      isActive ? "active" : ""
+                      isActive
+                        ? "active"
+                        : ""
                     }
                   >
                     {link.name}
@@ -130,16 +242,69 @@ function Navbar({ products = [] }) {
 
               ))}
 
+
+{/* ACCOUNT */}
+
+{isAuthenticated && (
+
+  <li className="nav-account">
+
+    <NavLink
+      to="/account"
+      className={({ isActive }) =>
+        `account-link ${
+          isActive ? "active" : ""
+        }`
+      }
+    >
+      Account
+    </NavLink>
+
+  </li>
+
+)}
+
+{/* LOGIN / LOGOUT */}
+
+<li className="nav-auth">
+
+  {isAuthenticated ? (
+
+    <NavLink
+      to="/home"
+      onClick={handleLogout}
+      className="logout-link"
+    >
+      Logout
+    </NavLink>
+
+  ) : (
+
+    <NavLink
+      to="/login"
+      className="login-link"
+    >
+      Login
+    </NavLink>
+
+  )}
+
+</li>
             </ul>
 
 
-            {/* ==================== MOBILE MENU ==================== */}
+            {/* ============================
+                MOBILE MENU
+            ============================ */}
 
             <div
               className={`mobile-menu ${
-                menuOpen ? "mobile-menu-open" : ""
+                menuOpen
+                  ? "mobile-menu-open"
+                  : ""
               }`}
             >
+
 
               {links.map((link) => (
 
@@ -147,7 +312,9 @@ function Navbar({ products = [] }) {
                   key={link.name}
                   to={link.path}
                   className={({ isActive }) =>
-                    isActive ? "active" : ""
+                    isActive
+                      ? "active"
+                      : ""
                   }
                   onClick={() =>
                     setMenuOpen(false)
@@ -159,18 +326,75 @@ function Navbar({ products = [] }) {
               ))}
 
 
-              {/* ==================== MOBILE ICONS ==================== */}
+{/* ============================
+    MOBILE ACCOUNT
+============================ */}
+
+{isAuthenticated && (
+
+  <NavLink
+    to="/account"
+    className={({ isActive }) =>
+      `account-link ${
+        isActive ? "active" : ""
+      }`
+    }
+    onClick={() =>
+      setMenuOpen(false)
+    }
+  >
+    Account
+  </NavLink>
+
+)}
+
+
+{/* ============================
+    MOBILE LOGIN / LOGOUT
+============================ */}
+
+{isAuthenticated ? (
+
+  <NavLink
+    to="/home"
+    className="logout-link"
+    onClick={handleLogout}
+  >
+    Logout
+  </NavLink>
+
+) : (
+
+  <NavLink
+    to="/login"
+    className="login-link"
+    onClick={() =>
+      setMenuOpen(false)
+    }
+  >
+    Login
+  </NavLink>
+
+)}
+
+              {/* ============================
+                  MOBILE ICONS
+              ============================ */}
 
               <div className="mobile-icons">
 
-                {/* Search */}
+
+                {/* SEARCH */}
 
                 <button
                   type="button"
                   className="search-trigger"
                   onClick={() => {
+
                     setSearchOpen(true);
+
                     setMenuOpen(false);
+
                   }}
                 >
 
@@ -183,12 +407,14 @@ function Navbar({ products = [] }) {
                 </button>
 
 
-                {/* Wishlist */}
+                {/* WISHLIST */}
 
                 <NavLink
                   to="/wishlist"
                   className={({ isActive }) =>
-                    isActive ? "active" : ""
+                    isActive
+                      ? "active"
+                      : ""
                   }
                   onClick={() =>
                     setMenuOpen(false)
@@ -204,13 +430,15 @@ function Navbar({ products = [] }) {
                 </NavLink>
 
 
-                {/* Cart */}
+                {/* CART */}
 
                 <NavLink
                   to="/cart"
                   className={({ isActive }) =>
                     `cart-icon ${
-                      isActive ? "active" : ""
+                      isActive
+                        ? "active"
+                        : ""
                     }`
                   }
                   onClick={() =>
@@ -234,6 +462,7 @@ function Navbar({ products = [] }) {
 
                 </NavLink>
 
+
               </div>
 
             </div>
@@ -241,18 +470,24 @@ function Navbar({ products = [] }) {
           </nav>
 
 
-          {/* ==================== DESKTOP ICONS ==================== */}
+          {/* ============================
+              DESKTOP ICONS
+          ============================ */}
 
           <div className="nav-icons">
 
-            {/* Search */}
+
+            {/* SEARCH */}
 
             <button
               type="button"
               className="search-trigger"
               onClick={() => {
+
                 setSearchOpen(true);
+
                 setMenuOpen(false);
+
               }}
             >
 
@@ -261,12 +496,14 @@ function Navbar({ products = [] }) {
             </button>
 
 
-            {/* Wishlist */}
+            {/* WISHLIST */}
 
             <NavLink
               to="/wishlist"
               className={({ isActive }) =>
-                isActive ? "active" : ""
+                isActive
+                  ? "active"
+                  : ""
               }
             >
 
@@ -275,13 +512,15 @@ function Navbar({ products = [] }) {
             </NavLink>
 
 
-            {/* Cart */}
+            {/* CART */}
 
             <NavLink
               to="/cart"
               className={({ isActive }) =>
                 `cart-icon ${
-                  isActive ? "active" : ""
+                  isActive
+                    ? "active"
+                    : ""
                 }`
               }
             >
@@ -298,10 +537,13 @@ function Navbar({ products = [] }) {
 
             </NavLink>
 
+
           </div>
 
 
-          {/* ==================== MOBILE TOGGLE ==================== */}
+          {/* ============================
+              MOBILE TOGGLE
+          ============================ */}
 
           <button
             className="menu-toggle"
@@ -318,12 +560,15 @@ function Navbar({ products = [] }) {
 
           </button>
 
+
         </div>
 
       </header>
 
 
-      {/* ==================== SEARCH OVERLAY ==================== */}
+      {/* ============================
+          SEARCH OVERLAY
+      ============================ */}
 
       <SearchOverlay
         products={products}
@@ -333,8 +578,10 @@ function Navbar({ products = [] }) {
         }
       />
 
+
     </>
   );
 }
+
 
 export default Navbar;

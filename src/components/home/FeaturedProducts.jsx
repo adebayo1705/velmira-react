@@ -1,62 +1,50 @@
+import { useEffect, useState } from "react";
+
 import "../../styles/featured.css";
 
 import ProductCard from "../products/ProductCard";
 
-import bag from "../../assets/images/products/bag1.jpg";
-import watch from "../../assets/images/products/watch1.jpg";
-import perfume from "../../assets/images/products/perfume1.jpg";
-import jewelry from "../../assets/images/products/jewelry1.jpg";
-
+import { getProducts } from "../../api/productApi";
 
 function FeaturedProducts() {
+  const [products, setProducts] = useState([]);
 
-  const products = [
+  // ============================
+  // LOAD PRODUCTS FROM BACKEND
+  // ============================
 
-    {
-      id: 3,
-      name: "Luxury Handbag",
-      category: "Bags",
-      price: "₦35,000",
-      image: bag,
-      badge: "New",
-      rating: 5,
-    },
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const data = await getProducts();
 
-    {
-      id: 7,
-      name: "Luxury Wristwatch",
-      category: "Watches",
-      price: "₦28,000",
-      image: watch,
-      badge: "Sale",
-      rating: 4,
-    },
+        console.log("FEATURED PRODUCTS:", data);
 
-    {
-      id: 11,
-      name: "Luxury Perfume",
-      category: "Perfumes",
-      price: "₦18,500",
-      image: perfume,
-      badge: "Hot",
-      rating: 4,
-    },
+        setProducts(data);
+      } catch (error) {
+        console.error("FEATURED PRODUCT ERROR:", error);
+      }
+    };
 
-    {
-      id: 5,
-      name: "Gold Necklace",
-      category: "Jewelry",
-      price: "₦25,000",
-      image: jewelry,
-      badge: "Popular",
-      rating: 5,
-    },
+    loadProducts();
+  }, []);
 
+  // ============================
+  // FEATURED PRODUCT IDS
+  // ============================
+
+  const featuredIds = [
+    "6a84c1e8247a4eee48357054",
+    "6a84c1e8247a4eee48357058",
+    "6a84c1e9247a4eee4835705c",
+    "6a84c1e8247a4eee48357056",
   ];
 
+  const featuredProducts = products.filter((product) =>
+    featuredIds.includes(product._id)
+  );
 
   return (
-
     <section className="featured-products">
 
       <div className="container">
@@ -73,14 +61,13 @@ function FeaturedProducts() {
 
         </div>
 
-
         <div className="products-grid">
 
-          {products.map((product) => (
+          {featuredProducts.map((product) => (
 
             <ProductCard
-              key={product.id}
-              id={product.id}
+              key={product._id}
+              id={product._id}
               image={product.image}
               name={product.name}
               category={product.category}
@@ -96,7 +83,6 @@ function FeaturedProducts() {
       </div>
 
     </section>
-
   );
 }
 

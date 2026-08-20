@@ -1,5 +1,14 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import {
+  useState,
+  useEffect,
+} from "react";
+
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
+
+import PaystackPop from "@paystack/inline-js";
 
 import Navbar from "../components/layouts/Navbar";
 import Footer from "../components/layouts/Footer";
@@ -7,13 +16,30 @@ import Footer from "../components/layouts/Footer";
 import searchProducts from "../data/searchProducts";
 
 import "../styles/checkout.css";
+
 import { useToast } from "../context/ToastContext.jsx";
+
+import { initializePayment } from "../api/paymentApi";
+import { createOrder } from "../api/orderApi";
+import { verifyPayment } from "../api/paymentApi";
+
+import { useAuth } from "../context/AuthContext";
+
 
 function Checkout() {
 
-  const { showToast } = useToast();
+  const navigate = useNavigate();
 
-  const [cart, setCart] = useState([]);
+  const { isAuthenticated } =
+    useAuth();
+
+  const { showToast } =
+    useToast();
+
+
+  const [cart, setCart] =
+    useState([]);
+
 
   const [paymentMethod, setPaymentMethod] =
     useState("");
@@ -26,7 +52,9 @@ function Checkout() {
   useEffect(() => {
 
     const savedCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
+      JSON.parse(
+        localStorage.getItem("cart")
+      ) || [];
 
     setCart(savedCart);
 
@@ -39,38 +67,52 @@ function Checkout() {
 
   const getPrice = (price) => {
 
+    if (
+      typeof price ===
+      "number"
+    ) {
+
+      return price;
+
+    }
+
     return Number(
-      price.replace(/[₦,]/g, "")
+      String(price)
+        .replace(/[₦,]/g, "")
     );
 
   };
 
 
-  const subtotal = cart.reduce(
-    (sum, item) =>
-      sum +
-      getPrice(item.price) *
-        Number(item.quantity || 0),
-    0
-  );
+  const subtotal =
+    cart.reduce(
+      (sum, item) =>
+        sum +
+        getPrice(item.price) *
+          Number(
+            item.quantity || 0
+          ),
+      0
+    );
 
 
   // ============================
   // FORM STATE
   // ============================
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] =
+    useState({
 
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    postalCode: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      state: "",
+      postalCode: "",
 
-  });
+    });
 
 
   // ============================
@@ -79,11 +121,19 @@ function Checkout() {
 
   const handleChange = (e) => {
 
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+    } = e.target;
+
 
     setFormData({
+
       ...formData,
-      [name]: value,
+
+      [name]:
+        value,
+
     });
 
   };
@@ -100,39 +150,51 @@ function Checkout() {
   const deliveryOptions = {
 
     standard: {
-      name: "Standard Delivery",
-      price: 2000,
+
+      name:
+        "Standard Delivery",
+
+      price:
+        2000,
+
     },
 
     express: {
-      name: "Express Delivery",
-      price: 5000,
+
+      name:
+        "Express Delivery",
+
+      price:
+        5000,
+
     },
 
     pickup: {
-      name: "Pickup Station",
-      price: 1000,
+
+      name:
+        "Pickup Station",
+
+      price:
+        50,
+
     },
 
   };
 
 
   const deliveryFee =
-
     deliveryMethod === "standard"
       ? 2000
-
       : deliveryMethod === "express"
-      ? 5000
-
-      : deliveryMethod === "pickup"
-      ? 1000
-
-      : 0;
+        ? 5000
+        : deliveryMethod === "pickup"
+          ? 50
+          : 0;
 
 
   const total =
-    subtotal + deliveryFee;
+    subtotal +
+    deliveryFee;
 
 
   const formatPrice = (price) => {
@@ -142,10 +204,519 @@ function Checkout() {
   };
 
 
+  // ============================================================
+  // HANDLE PAYSTACK POPUP CANCEL / CLOSE
+  // ============================================================
+
+  const handlePaystackCancel = async (
+    paymentReference
+  ) => {
+
+    console.log(
+      "PAYSTACK POPUP CLOSED"
+    );
+
+
+    console.log(
+      "CHECKING PAYMENT STATUS:",
+      paymentReference
+    );
+
+
+    try {
+
+      // ========================================================
+      // VERIFY THE TRANSACTION
+      // ========================================================
+
+      const result =
+        await verifyPayment(
+          paymentReference
+        );
+
+
+      console.log(
+        "PAYSTACK STATUS AFTER POPUP CLOSED:",
+        result
+      );
+
+
+      const paymentStatus =
+        result?.data?.status;
+
+
+      // ========================================================
+      // DECLINED / FAILED PAYMENT
+      // ========================================================
+
+      if (
+        paymentStatus ===
+        "failed"
+      ) {
+
+        console.log(
+          "PAYMENT WAS DECLINED / FAILED"
+        );
+
+
+        navigate(
+          `/payment/callback?reference=${encodeURIComponent(
+            paymentReference
+          )}&status=failed`
+        );
+
+
+        return;
+
+      }
+
+
+      // ========================================================
+      // ABANDONED PAYMENT
+      // ========================================================
+
+      if (
+        paymentStatus ===
+        "abandoned"
+      ) {
+
+        console.log(
+          "PAYMENT WAS ABANDONED"
+        );
+
+
+        navigate(
+          `/payment/callback?reference=${encodeURIComponent(
+            paymentReference
+          )}&status=cancelled`
+        );
+
+
+        return;
+
+      }
+
+
+      // ========================================================
+      // PAYMENT SUCCESS
+      // ========================================================
+
+      if (
+        paymentStatus ===
+        "success"
+      ) {
+
+        console.log(
+          "PAYMENT WAS ACTUALLY SUCCESSFUL"
+        );
+
+
+        navigate(
+          `/payment/callback?reference=${encodeURIComponent(
+            paymentReference
+          )}`
+        );
+
+
+        return;
+
+      }
+
+
+      // ========================================================
+      // PAYMENT WAS CLOSED BEFORE PAYSTACK HAD A FINAL STATUS
+      // ========================================================
+
+      console.log(
+        "PAYMENT HAS NO FINAL STATUS"
+      );
+
+
+      navigate(
+        `/payment/callback?reference=${encodeURIComponent(
+          paymentReference
+        )}&status=cancelled`
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "ERROR CHECKING PAYMENT AFTER POPUP CLOSED:",
+        error
+      );
+
+
+      // ========================================================
+      // IF WE CANNOT VERIFY AFTER CLOSE,
+      // TREAT IT AS CANCELLED
+      // ========================================================
+
+      navigate(
+        `/payment/callback?reference=${encodeURIComponent(
+          paymentReference
+        )}&status=cancelled`
+      );
+
+    }
+
+  };
+
+
+  // ============================================================
+  // START PAYSTACK PAYMENT
+  // ============================================================
+
+  const handlePlaceOrder = async () => {
+
+    console.log(
+      "🔥 PLACE ORDER BUTTON WAS CLICKED"
+    );
+
+
+    // ============================================================
+    // CHECK LOGIN
+    // ============================================================
+
+    if (!isAuthenticated) {
+
+      showToast(
+        "Please login before placing your order.",
+        "error"
+      );
+
+
+      navigate(
+        "/login",
+        {
+          state: {
+            from:
+              "/checkout",
+          },
+        }
+      );
+
+
+      return;
+
+    }
+
+
+    // ============================================================
+    // CHECK BILLING INFORMATION
+    // ============================================================
+
+    if (
+
+      !formData.firstName.trim() ||
+      !formData.lastName.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim() ||
+      !formData.address.trim() ||
+      !formData.city.trim() ||
+      !formData.state.trim()
+
+    ) {
+
+      showToast(
+        "Please fill in all your billing and shipping information.",
+        "error"
+      );
+
+
+      return;
+
+    }
+
+
+    // ============================================================
+    // CHECK DELIVERY METHOD
+    // ============================================================
+
+    if (!deliveryMethod) {
+
+      showToast(
+        "Please select a delivery method before continuing.",
+        "error"
+      );
+
+
+      return;
+
+    }
+
+
+    // ============================================================
+    // CHECK PAYMENT METHOD
+    // ============================================================
+
+    if (!paymentMethod) {
+
+      showToast(
+        "Please select a payment method before continuing.",
+        "error"
+      );
+
+
+      return;
+
+    }
+
+
+    try {
+
+      // ============================================================
+      // GENERATE PAYMENT REFERENCE
+      // ============================================================
+
+      const paymentReference =
+        `VELMIRA-${Date.now()}-${Math.floor(
+          Math.random() * 100000
+        )}`;
+
+
+      // ============================================================
+      // PREPARE PENDING ORDER
+      // ============================================================
+
+      const pendingOrder = {
+
+        customer: {
+
+          name:
+            `${formData.firstName} ${formData.lastName}`,
+
+          email:
+            formData.email,
+
+          phone:
+            formData.phone,
+
+        },
+
+
+        products:
+          cart.map((item) => ({
+
+            productId:
+              item.id,
+
+            quantity:
+              Number(item.quantity),
+
+            price:
+              getPrice(item.price),
+
+          })),
+
+
+        delivery: {
+
+          address:
+            `${formData.address}, ${formData.city}, ${formData.state}, ${formData.postalCode}`,
+
+          method:
+            deliveryOptions[
+              deliveryMethod
+            ].name,
+
+        },
+
+
+        paymentMethod,
+
+        paymentStatus:
+          "Pending",
+
+        paymentReference,
+
+        total,
+
+      };
+
+
+      // ============================================================
+      // CLEAR OLD COMPLETED PAYMENT
+      // ============================================================
+
+      localStorage.removeItem(
+        "completedPayment"
+      );
+
+
+      // ============================================================
+      // SAVE PENDING ORDER LOCALLY
+      // ============================================================
+
+      localStorage.setItem(
+
+        "pendingOrder",
+
+        JSON.stringify(
+          pendingOrder
+        )
+
+      );
+
+
+      // ============================================================
+      // CREATE PENDING ORDER IN DATABASE
+      // ============================================================
+
+      console.log(
+        "ORDER DATA BEING SENT TO BACKEND:",
+        JSON.stringify(
+          pendingOrder,
+          null,
+          2
+        )
+      );
+
+
+      const order =
+        await createOrder(
+          pendingOrder
+        );
+
+
+      console.log(
+        "PENDING ORDER CREATED:",
+        order
+      );
+
+
+      // ============================================================
+      // SAVE ORDER ID LOCALLY
+      // ============================================================
+
+      localStorage.setItem(
+
+        "pendingOrder",
+
+        JSON.stringify({
+
+          ...pendingOrder,
+
+          orderId:
+            order._id,
+
+        })
+
+      );
+
+
+      // ============================================================
+      // INITIALIZE PAYSTACK FROM BACKEND
+      // ============================================================
+
+      console.log(
+        "INITIALIZING PAYSTACK..."
+      );
+
+
+      const payment =
+        await initializePayment({
+
+          email:
+            formData.email,
+
+          amount:
+            total,
+
+          reference:
+            paymentReference,
+
+        });
+
+
+      console.log(
+        "PAYSTACK INITIALIZATION RESPONSE:",
+        payment
+      );
+
+
+      // ============================================================
+      // GET PAYSTACK ACCESS CODE
+      // ============================================================
+
+      const accessCode =
+        payment?.data?.access_code;
+
+
+      if (!accessCode) {
+
+        throw new Error(
+          "Paystack did not return an access code."
+        );
+
+      }
+
+
+      console.log(
+        "PAYSTACK ACCESS CODE:",
+        accessCode
+      );
+
+
+      // ============================================================
+      // OPEN PAYSTACK POPUP
+      // ============================================================
+
+      const paystack =
+        new PaystackPop();
+
+
+      paystack.resumeTransaction(
+        accessCode
+      );
+
+
+      // ============================================================
+      // NOTE:
+      //
+      // Paystack Popup V2 callbacks are attached
+      // during transaction creation.
+      //
+      // Because we are resuming a transaction that
+      // was initialized by our backend, the popup
+      // handles the transaction using the access code.
+      //
+      // The final payment status is always checked
+      // against Paystack from our backend.
+      // ============================================================
+
+
+    } catch (error) {
+
+      console.error(
+        "PAYMENT ERROR:",
+        error
+      );
+
+
+      showToast(
+
+        error.message ||
+          "Unable to start payment.",
+
+        "error"
+
+      );
+
+    }
+
+  };
+
+
   return (
+
     <>
 
-      <Navbar products={searchProducts} />
+      <Navbar
+        products={
+          searchProducts
+        }
+      />
 
 
       <main className="checkout-page">
@@ -165,19 +736,24 @@ function Checkout() {
               Complete your details to place your order.
             </p>
 
+
             <div className="breadcrumb">
 
               <Link to="/">
                 Home
               </Link>
 
-              <span>/</span>
+              <span>
+                /
+              </span>
 
               <Link to="/cart">
                 Cart
               </Link>
 
-              <span>/</span>
+              <span>
+                /
+              </span>
 
               <span>
                 Checkout
@@ -245,7 +821,12 @@ function Checkout() {
                   </div>
 
 
-                  <form className="checkout-form">
+                  <form
+                    className="checkout-form"
+                    onSubmit={(e) =>
+                      e.preventDefault()
+                    }
+                  >
 
 
                     {/* NAME */}
@@ -262,8 +843,12 @@ function Checkout() {
                           id="firstName"
                           name="firstName"
                           type="text"
-                          value={formData.firstName}
-                          onChange={handleChange}
+                          value={
+                            formData.firstName
+                          }
+                          onChange={
+                            handleChange
+                          }
                           placeholder="Enter your first name"
                           required
                         />
@@ -281,8 +866,12 @@ function Checkout() {
                           id="lastName"
                           name="lastName"
                           type="text"
-                          value={formData.lastName}
-                          onChange={handleChange}
+                          value={
+                            formData.lastName
+                          }
+                          onChange={
+                            handleChange
+                          }
                           placeholder="Enter your last name"
                           required
                         />
@@ -306,8 +895,12 @@ function Checkout() {
                           id="email"
                           name="email"
                           type="email"
-                          value={formData.email}
-                          onChange={handleChange}
+                          value={
+                            formData.email
+                          }
+                          onChange={
+                            handleChange
+                          }
                           placeholder="you@example.com"
                           required
                         />
@@ -325,8 +918,12 @@ function Checkout() {
                           id="phone"
                           name="phone"
                           type="tel"
-                          value={formData.phone}
-                          onChange={handleChange}
+                          value={
+                            formData.phone
+                          }
+                          onChange={
+                            handleChange
+                          }
                           placeholder="0800 000 0000"
                           required
                         />
@@ -348,8 +945,12 @@ function Checkout() {
                         id="address"
                         name="address"
                         type="text"
-                        value={formData.address}
-                        onChange={handleChange}
+                        value={
+                          formData.address
+                        }
+                        onChange={
+                          handleChange
+                        }
                         placeholder="Enter your delivery address"
                         required
                       />
@@ -371,8 +972,12 @@ function Checkout() {
                           id="city"
                           name="city"
                           type="text"
-                          value={formData.city}
-                          onChange={handleChange}
+                          value={
+                            formData.city
+                          }
+                          onChange={
+                            handleChange
+                          }
                           placeholder="City"
                           required
                         />
@@ -390,8 +995,12 @@ function Checkout() {
                           id="state"
                           name="state"
                           type="text"
-                          value={formData.state}
-                          onChange={handleChange}
+                          value={
+                            formData.state
+                          }
+                          onChange={
+                            handleChange
+                          }
                           placeholder="State"
                           required
                         />
@@ -409,10 +1018,13 @@ function Checkout() {
                           id="postalCode"
                           name="postalCode"
                           type="text"
-                          value={formData.postalCode}
-                          onChange={handleChange}
-                          placeholder="Postal code"
-                          required
+                          value={
+                            formData.postalCode
+                          }
+                          onChange={
+                            handleChange
+                          }
+                          placeholder="Postal code (optional)"
                         />
 
                       </div>
@@ -428,18 +1040,22 @@ function Checkout() {
                         Delivery Method
                       </h2>
 
+
                       <div className="delivery-options">
 
 
                         <button
                           type="button"
                           className={`delivery-option ${
-                            deliveryMethod === "standard"
+                            deliveryMethod ===
+                            "standard"
                               ? "selected"
                               : ""
                           }`}
                           onClick={() =>
-                            setDeliveryMethod("standard")
+                            setDeliveryMethod(
+                              "standard"
+                            )
                           }
                         >
 
@@ -461,12 +1077,15 @@ function Checkout() {
                         <button
                           type="button"
                           className={`delivery-option ${
-                            deliveryMethod === "express"
+                            deliveryMethod ===
+                            "express"
                               ? "selected"
                               : ""
                           }`}
                           onClick={() =>
-                            setDeliveryMethod("express")
+                            setDeliveryMethod(
+                              "express"
+                            )
                           }
                         >
 
@@ -488,12 +1107,15 @@ function Checkout() {
                         <button
                           type="button"
                           className={`delivery-option ${
-                            deliveryMethod === "pickup"
+                            deliveryMethod ===
+                            "pickup"
                               ? "selected"
                               : ""
                           }`}
                           onClick={() =>
-                            setDeliveryMethod("pickup")
+                            setDeliveryMethod(
+                              "pickup"
+                            )
                           }
                         >
 
@@ -504,13 +1126,12 @@ function Checkout() {
                             </strong>
 
                             <p>
-                              ₦1,000
+                              ₦50
                             </p>
 
                           </div>
 
                         </button>
-
 
                       </div>
 
@@ -541,7 +1162,8 @@ function Checkout() {
 
                         <label
                           className={`payment-option ${
-                            paymentMethod === "card"
+                            paymentMethod ===
+                            "card"
                               ? "payment-option-active"
                               : ""
                           }`}
@@ -552,7 +1174,8 @@ function Checkout() {
                             name="paymentMethod"
                             value="card"
                             checked={
-                              paymentMethod === "card"
+                              paymentMethod ===
+                              "card"
                             }
                             onChange={(e) =>
                               setPaymentMethod(
@@ -580,7 +1203,8 @@ function Checkout() {
 
                         <label
                           className={`payment-option ${
-                            paymentMethod === "bank"
+                            paymentMethod ===
+                            "bank"
                               ? "payment-option-active"
                               : ""
                           }`}
@@ -591,7 +1215,8 @@ function Checkout() {
                             name="paymentMethod"
                             value="bank"
                             checked={
-                              paymentMethod === "bank"
+                              paymentMethod ===
+                              "bank"
                             }
                             onChange={(e) =>
                               setPaymentMethod(
@@ -619,7 +1244,8 @@ function Checkout() {
 
                         <label
                           className={`payment-option ${
-                            paymentMethod === "ussd"
+                            paymentMethod ===
+                            "ussd"
                               ? "payment-option-active"
                               : ""
                           }`}
@@ -630,7 +1256,8 @@ function Checkout() {
                             name="paymentMethod"
                             value="ussd"
                             checked={
-                              paymentMethod === "ussd"
+                              paymentMethod ===
+                              "ussd"
                             }
                             onChange={(e) =>
                               setPaymentMethod(
@@ -653,7 +1280,6 @@ function Checkout() {
 
                         </label>
 
-
                       </div>
 
 
@@ -670,79 +1296,21 @@ function Checkout() {
                       </div>
 
 
-                      {/* ONLY PAYMENT BUTTON */}
+                      {/* PAYMENT BUTTON */}
 
                       <button
                         type="button"
                         className="secure-payment-btn"
-                        onClick={() => {
-
-                          /* ============================
-                             CHECK BILLING INFORMATION
-                          ============================ */
-
-                          if (
-                            !formData.firstName.trim() ||
-                            !formData.lastName.trim() ||
-                            !formData.email.trim() ||
-                            !formData.phone.trim() ||
-                            !formData.address.trim() ||
-                            !formData.city.trim() ||
-                            !formData.state.trim() ||
-                            !formData.postalCode.trim()
-                          ) {
-
-                            showToast(
-                              "Please fill in all your billing and shipping information.",
-                              "error"
-                            );
-
-                            return;
-                          }
-
-
-                          /* ============================
-                             CHECK DELIVERY METHOD
-                          ============================ */
-
-                          if (!deliveryMethod) {
-
-                            showToast(
-                              "Please select a delivery method before continuing.",
-                              "error"
-                            );
-
-                            return;
-                          }
-
-
-                          /* ============================
-                             CHECK PAYMENT METHOD
-                          ============================ */
-
-                          if (!paymentMethod) {
-
-                            showToast(
-                              "Please select a payment method before continuing.",
-                              "error"
-                            );
-
-                            return;
-                          }
-
-
-                          // Payment functionality will be added later.
-
-                        }}
+                        onClick={
+                          handlePlaceOrder
+                        }
                       >
                         Continue to Secure Payment
                       </button>
 
 
                       <div className="paystack-secure">
-
                         🔒 Secured by Paystack
-
                       </div>
 
                     </div>
@@ -800,12 +1368,12 @@ function Checkout() {
 
 
                         <strong>
-
                           {formatPrice(
-                            getPrice(item.price) *
-                            item.quantity
+                            getPrice(
+                              item.price
+                            ) *
+                              item.quantity
                           )}
-
                         </strong>
 
                       </div>
@@ -824,7 +1392,9 @@ function Checkout() {
                     </span>
 
                     <strong>
-                      {formatPrice(subtotal)}
+                      {formatPrice(
+                        subtotal
+                      )}
                     </strong>
 
                   </div>
@@ -837,7 +1407,9 @@ function Checkout() {
                     </span>
 
                     <strong>
-                      {formatPrice(deliveryFee)}
+                      {formatPrice(
+                        deliveryFee
+                      )}
                     </strong>
 
                   </div>
@@ -850,7 +1422,9 @@ function Checkout() {
                     </span>
 
                     <strong>
-                      {formatPrice(total)}
+                      {formatPrice(
+                        total
+                      )}
                     </strong>
 
                   </div>
@@ -879,7 +1453,10 @@ function Checkout() {
       <Footer />
 
     </>
+
   );
+
 }
+
 
 export default Checkout;

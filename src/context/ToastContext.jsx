@@ -1,63 +1,122 @@
-import { createContext, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useRef,
+  useState
+} from "react";
 
-const ToastContext = createContext();
 
-export function ToastProvider({ children }) {
+const ToastContext =
+  createContext();
 
-  const [toast, setToast] = useState({
-    visible: false,
-    message: "",
-    type: "success",
-  });
 
-  const timeoutRef = useRef(null);
+export function ToastProvider({
+  children
+}) {
 
-  const showToast = (message, type = "success") => {
+  const [toast, setToast] =
+    useState({
 
-    // Clear previous timer
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+      visible: false,
 
-    setToast({
-      visible: true,
-      message,
-      type,
+      message: "",
+
+      type: "success"
+
     });
 
-    timeoutRef.current = setTimeout(() => {
 
-      setToast({
-        visible: false,
-        message: "",
-        type: "success",
-      });
+  const timeoutRef =
+    useRef(null);
 
-    }, 3000);
+
+  const showToast = (
+    message,
+    type = "success"
+  ) => {
+
+
+    if (timeoutRef.current) {
+
+      clearTimeout(
+        timeoutRef.current
+      );
+
+    }
+
+
+    setToast({
+
+      visible: true,
+
+      message,
+
+      type
+
+    });
+
+
+    timeoutRef.current =
+      setTimeout(() => {
+
+        setToast({
+
+          visible: false,
+
+          message: "",
+
+          type: "success"
+
+        });
+
+      }, 3000);
+
   };
 
+
   return (
-    <ToastContext.Provider value={{ showToast }}>
+
+    <ToastContext.Provider
+      value={{
+        showToast
+      }}
+    >
 
       {children}
 
-      {/* ==================== GLOBAL TOAST ==================== */}
+
+      {/* ============================
+          GLOBAL TOAST
+      ============================ */}
 
       <div
-        className={`velmira-toast ${
-          toast.visible ? "velmira-toast-show" : ""
-        } ${toast.type}`}
+        className={`
+          velmira-toast
+          ${
+            toast.visible
+              ? "velmira-toast-show"
+              : ""
+          }
+          ${toast.type}
+        `}
       >
 
         <div className="velmira-toast-icon">
 
-          {toast.type === "success" && "✓"}
+          {toast.type === "success" &&
+            "✓"
+          }
 
-          {toast.type === "error" && "✕"}
+          {toast.type === "error" &&
+            "✕"
+          }
 
-          {toast.type === "info" && "i"}
+          {toast.type === "info" &&
+            "i"
+          }
 
         </div>
+
 
         <span>
           {toast.message}
@@ -65,10 +124,18 @@ export function ToastProvider({ children }) {
 
       </div>
 
+
     </ToastContext.Provider>
+
   );
+
 }
 
+
 export function useToast() {
-  return useContext(ToastContext);
+
+  return useContext(
+    ToastContext
+  );
+
 }

@@ -567,3 +567,152 @@ MOBILE
   }
 
 }
+
+/* ============================
+   ACCOUNT LINK
+============================ */
+
+.account-link {
+
+  display: inline-block;
+
+  padding: 10px 20px;
+
+  background: #1c1c1c;
+
+  color: #ffffff !important;
+
+  border: 1px solid #1c1c1c;
+
+  border-radius: 3px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+
+  text-decoration: none;
+
+  transition: all 0.3s ease;
+
+}
+
+.account-link:hover {
+
+  background: #b89b5e;
+
+  border-color: #b89b5e;
+
+  color: #ffffff !important;
+
+}
+
+.account-link.active {
+
+  background: #b89b5e;
+
+  border-color: #b89b5e;
+
+  color: #ffffff !important;
+
+}
+
+
+/* ============================
+   LOGIN LINK
+============================ */
+
+.login-link {
+
+  display: inline-block;
+
+  padding: 10px 20px;
+
+  background: #1c1c1c;
+
+  color: #ffffff !important;
+
+  border: 1px solid #1c1c1c;
+
+  border-radius: 3px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+
+  text-decoration: none;
+
+  transition: all 0.3s ease;
+
+}
+
+.login-link:hover {
+
+  background: #b89b5e;
+
+  border-color: #b89b5e;
+
+  color: #ffffff !important;
+
+}
+
+
+/* ============================
+   LOGOUT LINK
+============================ */
+
+.logout-link {
+
+  display: inline-block;
+
+  padding: 10px 20px;
+
+  background: #ffffff;
+
+  color: #b42323 !important;
+
+  border: 1px solid #d8cdb8;
+
+  border-radius: 3px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+
+  text-decoration: none;
+
+  transition: all 0.3s ease;
+
+}
+
+.logout-link:hover {
+
+  background: #b89b5e;
+
+  border-color: #b89b5e;
+
+  color: #ffffff !important;
+
+}
+
+
+/* ============================
+   CENTER ACCOUNT / LOGIN / LOGOUT
+   ON MOBILE
+============================ */
+
+@media (max-width: 768px) {
+
+  .mobile-menu .account-link,
+  .mobile-menu .login-link,
+  .mobile-menu .logout-link {
+
+    display: block;
+
+    width: fit-content;
+
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+
+}

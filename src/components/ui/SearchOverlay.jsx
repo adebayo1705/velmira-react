@@ -11,10 +11,11 @@ import ProductCard from "../products/ProductCard";
 import "../../styles/SearchOverlay.css";
 
 
-function SearchOverlay({ products = [], isOpen, onClose }) {
-
-  console.log("SearchOverlay products:", products);
-  console.log("SearchOverlay product count:", products.length);
+function SearchOverlay({
+  products = [],
+  isOpen,
+  onClose,
+}) {
 
   const navigate = useNavigate();
 
@@ -62,7 +63,7 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
 
     };
 
-  });
+  }, []);
 
 
   // ============================
@@ -114,8 +115,8 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
               .trim();
 
           return (
-            productName.includes(keyword) ||
-            productCategory.includes(keyword)
+            productName?.includes(keyword) ||
+            productCategory?.includes(keyword)
           );
 
         });
@@ -125,9 +126,7 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
   // POPULAR SEARCH
   // ============================
 
-  const handlePopularSearch = (
-    searchTerm
-  ) => {
+  const handlePopularSearch = (searchTerm) => {
 
     setSearch(searchTerm);
 
@@ -152,6 +151,10 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
   };
 
 
+  // ============================
+  // PAGE
+  // ============================
+
   return (
 
     <div
@@ -174,7 +177,9 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
       <div className="search-overlay-content">
 
 
-        {/* ==================== CLOSE ==================== */}
+        {/* ============================
+            CLOSE
+        ============================ */}
 
         <button
           type="button"
@@ -188,7 +193,9 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
         </button>
 
 
-        {/* ==================== HEADING ==================== */}
+        {/* ============================
+            HEADING
+        ============================ */}
 
         <h2>
           Search Velmira
@@ -200,26 +207,33 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
         </p>
 
 
-        {/* ==================== SEARCH BOX ==================== */}
+        {/* ============================
+            SEARCH BOX
+        ============================ */}
 
         <div className="overlay-search-box">
 
           <FaSearch />
 
-<input
-  type="text"
-  id="overlaySearchInput"
-  name="search"
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-  placeholder="Search products..."
-  autoComplete="off"
-/>
+          <input
+            type="text"
+            id="overlaySearchInput"
+            name="search"
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+            placeholder="Search products..."
+            autoComplete="off"
+            autoFocus={isOpen}
+          />
 
         </div>
 
 
-        {/* ==================== RESULTS ==================== */}
+        {/* ============================
+            RESULTS
+        ============================ */}
 
         {keyword !== "" && (
 
@@ -234,27 +248,26 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
 
               <div className="products-grid">
 
-                {filteredProducts.map(
-                  (product) => (
+                {filteredProducts.map((product) => (
 
-                    <div
-                      key={product.id}
-                      className="search-result"
-                      onClick={() =>
-                        handleProductClick(
-                          product
-                        )
-                      }
-                    >
+                  <div
+                    key={product._id}
+                    className="search-result"
+                  >
 
-                      <ProductCard
-                        {...product}
-                      />
+                    <ProductCard
+                      id={product._id}
+                      image={product.image}
+                      name={product.name}
+                      category={product.category}
+                      price={product.price}
+                      badge={product.badge}
+                      rating={product.rating}
+                    />
 
-                    </div>
+                  </div>
 
-                  )
-                )}
+                ))}
 
               </div>
 
@@ -268,6 +281,11 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
                   No Products Found
                 </h3>
 
+                <p>
+                  We couldn't find any products
+                  matching your search.
+                </p>
+
               </div>
 
             )}
@@ -277,7 +295,9 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
         )}
 
 
-        {/* ==================== POPULAR SEARCHES ==================== */}
+        {/* ============================
+            POPULAR SEARCHES
+        ============================ */}
 
         <div className="overlay-section">
 
@@ -358,5 +378,6 @@ function SearchOverlay({ products = [], isOpen, onClose }) {
   );
 
 }
+
 
 export default SearchOverlay;

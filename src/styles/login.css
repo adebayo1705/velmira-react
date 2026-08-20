@@ -1,0 +1,419 @@
+/* ============================
+   LOGIN / REGISTER PAGE
+============================ */
+
+.login-page {
+  min-height: calc(100vh - var(--header-height));
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 80px 20px;
+
+  background: #f8f6f2;
+}
+
+
+/* ============================
+   CONTAINER
+============================ */
+
+.login-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+
+/* ============================
+   CARD
+============================ */
+
+.login-content {
+  background: #ffffff;
+
+  padding: 50px 45px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.08);
+
+  text-align: center;
+}
+
+
+/* ============================
+   HEADING
+============================ */
+
+.login-content h1 {
+  margin: 0 0 12px;
+
+  font-family: "Playfair Display", serif;
+
+  font-size: 38px;
+
+  font-weight: 600;
+
+  color: #1d1d1d;
+}
+
+
+.login-content > p {
+  margin: 0 0 35px;
+
+  color: #777;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* ============================
+   ERROR
+============================ */
+
+.login-error {
+  margin-bottom: 25px;
+
+  padding: 13px 16px;
+
+  border-radius: 8px;
+
+  background: #fff1f1;
+
+  border: 1px solid #e8bcbc;
+
+  color: #b42323;
+
+  font-size: 14px;
+
+  text-align: left;
+}
+
+
+/* ============================
+   FORM
+============================ */
+
+.login-content form {
+  text-align: left;
+}
+
+
+/* ============================
+   FORM GROUP
+============================ */
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+
+/* ============================
+   LABEL
+============================ */
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #333;
+}
+
+
+/* ============================
+   INPUT
+============================ */
+
+.form-group input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 14px 16px;
+
+  border: 1px solid #d8d5d0;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #222;
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+
+.form-group input::placeholder {
+  color: #aaa;
+}
+
+
+.form-group input:focus {
+  border-color: var(--primary-color);
+
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+
+/* ============================
+   MAIN BUTTON
+============================ */
+
+.login-content form > button {
+  width: 100%;
+
+  margin-top: 8px;
+
+  padding: 15px 20px;
+
+  border: 1px solid #1d1d1d;
+
+  border-radius: 8px;
+
+  background: #1d1d1d;
+
+  color: #ffffff !important;
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+
+/* ============================
+   BUTTON HOVER
+============================ */
+
+.login-content form > button:hover:not(:disabled) {
+  background: #b89b5e !important;
+
+  border-color: #b89b5e !important;
+
+  color: #ffffff !important;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(184, 155, 94, 0.25);
+}
+
+
+/* ============================
+   BUTTON ACTIVE
+============================ */
+
+.login-content form > button:active:not(:disabled) {
+  background: #a88b50 !important;
+
+  border-color: #a88b50 !important;
+
+  color: #ffffff !important;
+
+  transform: translateY(0);
+
+  box-shadow: none;
+}
+
+
+/* ============================
+   DISABLED
+============================ */
+
+.login-content form > button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* ============================
+   LOGIN / REGISTER SWITCH
+============================ */
+
+.login-switch {
+  margin-top: 28px !important;
+
+  margin-bottom: 0 !important;
+
+  font-size: 14px;
+
+  color: #777;
+}
+
+
+.login-switch a {
+  color: #1d1d1d;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: color 0.3s ease;
+}
+
+
+.login-switch a:hover {
+  color: var(--primary-color);
+}
+
+
+/* ============================
+   PASSWORD INPUT
+============================ */
+
+.password-input-wrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+
+.password-input-wrapper input {
+  width: 100%;
+
+  padding-right: 50px;
+}
+
+
+/* ============================
+   PASSWORD TOGGLE
+============================ */
+
+.password-input-wrapper .password-toggle {
+  position: absolute;
+
+  top: 50%;
+  right: 15px;
+
+  width: auto;
+
+  margin: 0;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #777;
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%);
+
+  box-shadow: none;
+
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+
+.password-input-wrapper .password-toggle:hover {
+  background: transparent;
+
+  color: var(--primary-color);
+
+  transform:
+    translateY(-50%)
+    scale(1.08);
+
+  box-shadow: none;
+}
+
+
+.password-input-wrapper .password-toggle:focus {
+  outline: none;
+
+  background: transparent;
+
+  box-shadow: none;
+}
+
+
+.password-input-wrapper .password-toggle:active {
+  background: transparent;
+
+  transform:
+    translateY(-50%)
+    scale(0.95);
+}
+
+
+/* ============================
+   MOBILE
+============================ */
+
+@media (max-width: 600px) {
+
+  .login-page {
+    padding: 50px 18px;
+  }
+
+
+  .login-content {
+    padding: 38px 25px;
+
+    border-radius: 14px;
+  }
+
+
+  .login-content h1 {
+    font-size: 32px;
+  }
+
+}
+
+
+@media (max-width: 400px) {
+
+  .login-content {
+    padding: 32px 20px;
+  }
+
+
+  .login-content h1 {
+    font-size: 29px;
+  }
+
+}

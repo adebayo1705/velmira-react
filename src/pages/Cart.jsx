@@ -86,8 +86,12 @@ function Cart() {
   // ============================
 
   const getPrice = (price) => {
+    if (typeof price === "number") {
+      return price;
+    }
+
     return Number(
-      price.replace(/[₦,]/g, "")
+      String(price).replace(/[₦,]/g, "")
     );
   };
 
@@ -98,10 +102,11 @@ function Cart() {
     0
   );
 
-  const formatPrice = (price) => {
-    return `₦${price.toLocaleString()}`;
-  };
 
+  const formatPrice = (price) => {
+    return `₦${Number(price).toLocaleString()}`;
+  };
+  
   return (
     <>
       <Navbar products={searchProducts} />
@@ -171,13 +176,12 @@ function Cart() {
               You haven't added any products to your cart yet.
             </p>
 
-            <a
-              href="/shop"
-              className="continue-shopping"
-            >
-              Continue Shopping
-            </a>
-
+<Link
+  to="/shop"
+  className="continue-shopping"
+>
+  Continue Shopping
+</Link>
           </div>
 
         </ScrollReveal>
