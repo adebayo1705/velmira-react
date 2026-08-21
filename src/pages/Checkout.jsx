@@ -8,8 +8,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import PaystackPop from "@paystack/inline-js";
-
 import Navbar from "../components/layouts/Navbar";
 import Footer from "../components/layouts/Footer";
 
@@ -19,9 +17,12 @@ import "../styles/checkout.css";
 
 import { useToast } from "../context/ToastContext.jsx";
 
-import { initializePayment } from "../api/paymentApi";
+import {
+  initializePayment,
+  verifyPayment,
+} from "../api/paymentApi";
+
 import { createOrder } from "../api/orderApi";
-import { verifyPayment } from "../api/paymentApi";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -59,6 +60,70 @@ function Checkout() {
     setCart(savedCart);
 
   }, []);
+
+
+  // ============================
+  // PRODUCT IMAGE URL
+  // ============================
+
+  const getImageUrl = (image) => {
+
+    if (!image) {
+      return "";
+    }
+
+
+    // Already an external image
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+
+      return image;
+
+    }
+
+
+    /*
+      Your cart currently stores:
+
+      /velmira-react/images/products/bag1.jpg
+
+      But Vercel serves the public folder from
+      the website root.
+
+      Therefore remove the old
+      /velmira-react prefix.
+    */
+
+    if (
+      image.startsWith(
+        "/velmira-react/"
+      )
+    ) {
+
+      return image.replace(
+        "/velmira-react",
+        ""
+      );
+
+    }
+
+
+    // Already starts from root
+    if (
+      image.startsWith("/")
+    ) {
+
+      return image;
+
+    }
+
+
+    // Relative image path
+    return `/${image}`;
+
+  };
 
 
   // ============================
@@ -225,10 +290,6 @@ function Checkout() {
 
     try {
 
-      // ========================================================
-      // VERIFY THE TRANSACTION
-      // ========================================================
-
       const result =
         await verifyPayment(
           paymentReference
@@ -245,9 +306,7 @@ function Checkout() {
         result?.data?.status;
 
 
-      // ========================================================
-      // DECLINED / FAILED PAYMENT
-      // ========================================================
+      // FAILED
 
       if (
         paymentStatus ===
@@ -271,9 +330,7 @@ function Checkout() {
       }
 
 
-      // ========================================================
-      // ABANDONED PAYMENT
-      // ========================================================
+      // ABANDONED
 
       if (
         paymentStatus ===
@@ -297,9 +354,7 @@ function Checkout() {
       }
 
 
-      // ========================================================
-      // PAYMENT SUCCESS
-      // ========================================================
+      // SUCCESS
 
       if (
         paymentStatus ===
@@ -323,9 +378,7 @@ function Checkout() {
       }
 
 
-      // ========================================================
-      // PAYMENT WAS CLOSED BEFORE PAYSTACK HAD A FINAL STATUS
-      // ========================================================
+      // NO FINAL STATUS
 
       console.log(
         "PAYMENT HAS NO FINAL STATUS"
@@ -346,11 +399,6 @@ function Checkout() {
         error
       );
 
-
-      // ========================================================
-      // IF WE CANNOT VERIFY AFTER CLOSE,
-      // TREAT IT AS CANCELLED
-      // ========================================================
 
       navigate(
         `/payment/callback?reference=${encodeURIComponent(
@@ -560,7 +608,7 @@ function Checkout() {
 
 
       // ============================================================
-      // CREATE PENDING ORDER IN DATABASE
+      // CREATE PENDING ORDER
       // ============================================================
 
       console.log(
@@ -586,7 +634,7 @@ function Checkout() {
 
 
       // ============================================================
-      // SAVE ORDER ID LOCALLY
+      // SAVE ORDER ID
       // ============================================================
 
       localStorage.setItem(
@@ -606,7 +654,7 @@ function Checkout() {
 
 
       // ============================================================
-      // INITIALIZE PAYSTACK FROM BACKEND
+      // INITIALIZE PAYSTACK
       // ============================================================
 
       console.log(
@@ -636,7 +684,7 @@ function Checkout() {
 
 
       // ============================================================
-      // GET PAYSTACK ACCESS CODE
+      // GET ACCESS CODE
       // ============================================================
 
       const accessCode =
@@ -659,25 +707,11 @@ function Checkout() {
 
 
       // ============================================================
-      // OPEN PAYSTACK POPUP
+      // REDIRECT TO PAYSTACK HOSTED CHECKOUT
       // ============================================================
 
-window.location.href =
-  payment.data.authorization_url;
-
-      // ============================================================
-      // NOTE:
-      //
-      // Paystack Popup V2 callbacks are attached
-      // during transaction creation.
-      //
-      // Because we are resuming a transaction that
-      // was initialized by our backend, the popup
-      // handles the transaction using the access code.
-      //
-      // The final payment status is always checked
-      // against Paystack from our backend.
-      // ============================================================
+      window.location.href =
+        payment.data.authorization_url;
 
 
     } catch (error) {
@@ -767,8 +801,6 @@ window.location.href =
           <div className="container">
 
             {cart.length === 0 ? (
-
-              /* ==================== EMPTY CART ==================== */
 
               <div className="empty-checkout">
 
@@ -1037,7 +1069,6 @@ window.location.href =
 
                       <div className="delivery-options">
 
-
                         <button
                           type="button"
                           className={`delivery-option ${
@@ -1151,8 +1182,7 @@ window.location.href =
 
                       <div className="payment-options">
 
-
-                        {/* CREDIT / DEBIT CARD */}
+                        {/* CARD */}
 
                         <label
                           className={`payment-option ${
@@ -1193,7 +1223,7 @@ window.location.href =
                         </label>
 
 
-                        {/* BANK TRANSFER */}
+                        {/* BANK */}
 
                         <label
                           className={`payment-option ${
@@ -1277,8 +1307,6 @@ window.location.href =
                       </div>
 
 
-                      {/* PAYMENT INFORMATION */}
-
                       <div className="payment-information">
 
                         <p>
@@ -1289,8 +1317,6 @@ window.location.href =
 
                       </div>
 
-
-                      {/* PAYMENT BUTTON */}
 
                       <button
                         type="button"
@@ -1337,8 +1363,22 @@ window.location.href =
                         <div className="checkout-product-image">
 
                           <img
-                            src={item.image}
-                            alt={item.name}
+                            src={
+                              getImageUrl(
+                                item.image
+                              )
+                            }
+                            alt={
+                              item.name
+                            }
+                            onError={(e) => {
+
+                              console.error(
+                                "CHECKOUT IMAGE FAILED:",
+                                item.image
+                              );
+
+                            }}
                           />
 
                           <span>
@@ -1366,7 +1406,9 @@ window.location.href =
                             getPrice(
                               item.price
                             ) *
-                              item.quantity
+                              Number(
+                                item.quantity
+                              )
                           )}
                         </strong>
 
