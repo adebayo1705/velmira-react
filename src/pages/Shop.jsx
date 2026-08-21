@@ -23,11 +23,17 @@ function Shop() {
 
   const [products, setProducts] = useState([]);
 
+  // NEW: PRODUCT LOADING STATE
+  const [loading, setLoading] = useState(true);
+
+
   useEffect(() => {
 
     const loadProducts = async () => {
 
       try {
+
+        setLoading(true);
 
         const data = await getProducts();
 
@@ -38,6 +44,12 @@ function Shop() {
       } catch (error) {
 
         console.error("PRODUCT ERROR:", error);
+
+        setProducts([]);
+
+      } finally {
+
+        setLoading(false);
 
       }
 
@@ -154,7 +166,10 @@ function Shop() {
 
     return () => {
 
-      window.removeEventListener("showToast", handleToast);
+      window.removeEventListener(
+        "showToast",
+        handleToast
+      );
 
     };
 
@@ -167,6 +182,7 @@ function Shop() {
 
   console.log("SHOP PRODUCTS:", products);
   console.log("SHOP PRODUCT COUNT:", products.length);
+  console.log("SHOP LOADING:", loading);
 
 
   // ============================
@@ -346,7 +362,35 @@ function Shop() {
 
             <div className="products-grid">
 
-              {filteredProducts.length > 0 ? (
+
+              {/* ============================
+                  LOADING
+              ============================ */}
+
+              {loading ? (
+
+                <ScrollReveal>
+
+                  <div className="no-products">
+
+                    <h3>
+                      Loading Products...
+                    </h3>
+
+                    <p>
+                      Please wait while we load our products.
+                    </p>
+
+                  </div>
+
+                </ScrollReveal>
+
+
+              ) : filteredProducts.length > 0 ? (
+
+                /* ============================
+                   PRODUCTS LOADED
+                ============================ */
 
                 filteredProducts.map((product) => (
 
@@ -366,7 +410,12 @@ function Shop() {
 
                 ))
 
+
               ) : (
+
+                /* ============================
+                   NO PRODUCTS
+                ============================ */
 
                 <ScrollReveal>
 
