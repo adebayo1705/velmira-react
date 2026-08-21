@@ -1,426 +1,863 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams
+} from "react-router-dom";
 
-import Navbar from "../components/layouts/Navbar";
-import Footer from "../components/layouts/Footer";
+import Navbar
+  from "../components/layouts/Navbar";
 
-import searchProducts from "../data/searchProducts";
+import Footer
+  from "../components/layouts/Footer";
 
-import { verifyPayment } from "../api/paymentApi";
+import searchProducts
+  from "../data/searchProducts";
 
-import { getOrderById } from "../api/orderApi";
+import {
+  verifyPayment
+} from "../api/paymentApi";
 
-import { useToast } from "../context/ToastContext.jsx";
+import {
+  getOrderById
+} from "../api/orderApi";
+
+import {
+  useToast
+} from "../context/ToastContext.jsx";
 
 import "../styles/paymentCallback.css";
 
+
 function PaymentCallback() {
-  const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
+  const navigate =
+    useNavigate();
 
-  const { showToast } = useToast();
 
-  const [status, setStatus] = useState("verifying");
+  const [searchParams] =
+    useSearchParams();
+
+
+  const {
+    showToast
+  } = useToast();
+
+
+  const [status, setStatus] =
+    useState("verifying");
+
 
   // ========================================
   // PREVENT DUPLICATE PROCESSING
   // ========================================
 
-  const processingRef = useRef(false);
+  const processingRef =
+    useRef(false);
+
 
   // ========================================
   // PAYMENT CALLBACK
   // ========================================
 
   useEffect(() => {
-    // ========================================
-    // PREVENT SECOND EXECUTION
-    // ========================================
 
-    if (processingRef.current) {
+    if (
+      processingRef.current
+    ) {
+
       return;
+
     }
 
-    processingRef.current = true;
+
+    processingRef.current =
+      true;
+
 
     // ========================================
     // GET CALLBACK STATUS
     // ========================================
 
-    const callbackStatus = searchParams.get("status");
+    const callbackStatus =
+      searchParams.get(
+        "status"
+      );
+
 
     // ========================================
     // GET PAYMENT REFERENCE
     // ========================================
 
-    const reference = searchParams.get("reference");
+    const reference =
+      searchParams.get(
+        "reference"
+      );
+
 
     // ========================================
     // PAYMENT CANCELLED
     // ========================================
 
-    if (callbackStatus === "cancelled") {
-      console.log("PAYSTACK PAYMENT CANCELLED");
+    if (
+      callbackStatus ===
+      "cancelled"
+    ) {
 
-      setStatus("cancelled");
+      console.log(
+        "PAYSTACK PAYMENT CANCELLED"
+      );
+
+
+      setStatus(
+        "cancelled"
+      );
+
 
       showToast(
         "Payment was cancelled. Your order has not been paid.",
-        "error",
+        "error"
       );
 
+
       return;
+
     }
+
 
     // ========================================
     // CHECK PAYMENT REFERENCE
     // ========================================
 
     if (!reference) {
-      console.log("NO PAYMENT REFERENCE FOUND");
 
-      setStatus("failed");
+      console.log(
+        "NO PAYMENT REFERENCE FOUND"
+      );
 
-      showToast("Payment reference was not found.", "error");
+
+      setStatus(
+        "failed"
+      );
+
+
+      showToast(
+        "Payment reference was not found.",
+        "error"
+      );
+
 
       return;
+
     }
 
+
     // ========================================
-    // CHECK IF PAYMENT WAS ALREADY PROCESSED
+    // CHECK PREVIOUSLY COMPLETED PAYMENT
     // ========================================
 
-    const completedPayment = localStorage.getItem("completedPayment");
+    const completedPayment =
+      localStorage.getItem(
+        "completedPayment"
+      );
+
 
     if (completedPayment) {
+
       try {
-        const payment = JSON.parse(completedPayment);
 
-        if (payment.reference === reference) {
-          console.log("PAYMENT ALREADY PROCESSED:", payment);
+        const payment =
+          JSON.parse(
+            completedPayment
+          );
 
-          setStatus("success");
 
-          showToast("Payment already verified.", "success");
+        if (
+          payment.reference ===
+          reference &&
+          payment.orderId
+        ) {
+
+          console.log(
+            "PAYMENT ALREADY PROCESSED:",
+            payment
+          );
+
+
+          setStatus(
+            "success"
+          );
+
+
+          showToast(
+            "Payment already verified.",
+            "success"
+          );
+
 
           setTimeout(() => {
-            navigate(`/account/orders/${payment.orderId}`);
-          }, 800);
+
+            navigate(
+              `/account/orders/${payment.orderId}`
+            );
+
+          }, 3000);
+
 
           return;
-        }
-      } catch (error) {
-        console.error("COMPLETED PAYMENT DATA ERROR:", error);
 
-        localStorage.removeItem("completedPayment");
+        }
+
+      } catch (error) {
+
+        console.error(
+          "COMPLETED PAYMENT DATA ERROR:",
+          error
+        );
+
+
+        localStorage.removeItem(
+          "completedPayment"
+        );
+
       }
+
     }
+
 
     // ========================================
     // VERIFY PAYMENT
     // ========================================
 
-    const checkPayment = async () => {
-      try {
-        console.log("VERIFYING PAYMENT:", reference);
+    const checkPayment =
+      async () => {
 
-        const result = await verifyPayment(reference);
+        try {
 
-        console.log("PAYMENT VERIFICATION:", result);
+          console.log(
+            "VERIFYING PAYMENT:",
+            reference
+          );
 
-        // ========================================
-        // CHECK PAYSTACK RESPONSE
-        // ========================================
 
-        if (result?.status !== true) {
-          throw new Error("Unable to verify payment with Paystack.");
-        }
+          // ========================================
+          // ASK BACKEND TO VERIFY PAYSTACK
+          // ========================================
 
-        // ========================================
-        // GET PAYSTACK PAYMENT STATUS
-        // ========================================
+          const result =
+            await verifyPayment(
+              reference
+            );
 
-        const paymentStatus = result?.data?.status;
 
-        console.log("PAYSTACK PAYMENT STATUS:", paymentStatus);
+          console.log(
+            "PAYMENT VERIFICATION:",
+            result
+          );
 
-        // ========================================
-        // PAYMENT FAILED
-        // ========================================
 
-        if (paymentStatus === "failed") {
-          console.log("PAYSTACK PAYMENT FAILED:", reference);
+          // ========================================
+          // CHECK BACKEND RESPONSE
+          // ========================================
 
-          setStatus("failed");
+          if (
+            result?.status !==
+            true
+          ) {
 
-          showToast("Payment failed. Please try again.", "error");
+            throw new Error(
+              "Unable to verify payment with Paystack."
+            );
 
-          return;
-        }
+          }
 
-        // ========================================
-        // PAYMENT ABANDONED
-        // ========================================
 
-        if (paymentStatus === "abandoned") {
-          console.log("PAYSTACK PAYMENT ABANDONED:", reference);
+          // ========================================
+          // GET PAYSTACK STATUS
+          // ========================================
 
-          setStatus("cancelled");
+          const paymentStatus =
+            result?.data?.status;
+
+
+          console.log(
+            "PAYSTACK PAYMENT STATUS:",
+            paymentStatus
+          );
+
+
+          // ========================================
+          // PAYMENT FAILED
+          // ========================================
+
+          if (
+            paymentStatus ===
+            "failed"
+          ) {
+
+            console.log(
+              "PAYSTACK PAYMENT FAILED:",
+              reference
+            );
+
+
+            setStatus(
+              "failed"
+            );
+
+
+            showToast(
+              "Payment failed. Please try again.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          // ========================================
+          // PAYMENT ABANDONED
+          // ========================================
+
+          if (
+            paymentStatus ===
+            "abandoned"
+          ) {
+
+            console.log(
+              "PAYSTACK PAYMENT ABANDONED:",
+              reference
+            );
+
+
+            setStatus(
+              "cancelled"
+            );
+
+
+            showToast(
+              "Payment was cancelled. Your order has not been paid.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          // ========================================
+          // PAYMENT NOT SUCCESSFUL YET
+          // ========================================
+
+          if (
+            paymentStatus !==
+            "success"
+          ) {
+
+            throw new Error(
+              `Payment has not been completed. Current status: ${paymentStatus}`
+            );
+
+          }
+
+
+          // ========================================
+          // GET PENDING ORDER
+          // ========================================
+
+          const savedOrder =
+            localStorage.getItem(
+              "pendingOrder"
+            );
+
+
+          if (!savedOrder) {
+
+            throw new Error(
+              "Pending order information was not found."
+            );
+
+          }
+
+
+          const pendingOrder =
+            JSON.parse(
+              savedOrder
+            );
+
+
+          console.log(
+            "PENDING ORDER:",
+            pendingOrder
+          );
+
+
+          // ========================================
+          // GET ORDER ID
+          // ========================================
+
+          const orderId =
+            pendingOrder.orderId;
+
+
+          if (!orderId) {
+
+            throw new Error(
+              "Order ID was not found."
+            );
+
+          }
+
+
+          // ========================================
+          // GET EXISTING ORDER
+          // ========================================
+
+          const existingOrder =
+            await getOrderById(
+              orderId
+            );
+
+
+          console.log(
+            "EXISTING ORDER:",
+            existingOrder
+          );
+
+
+          if (
+            !existingOrder ||
+            !existingOrder._id
+          ) {
+
+            throw new Error(
+              "Existing order could not be found."
+            );
+
+          }
+
+
+          // ========================================
+          // CHECK PAYMENT REFERENCE
+          // ========================================
+
+          if (
+            existingOrder.paymentReference !==
+            reference
+          ) {
+
+            throw new Error(
+              "Payment reference does not match the order."
+            );
+
+          }
+
+
+          // ========================================
+          // CHECK ORDER PAYMENT STATUS
+          // ========================================
+
+          if (
+            existingOrder.paymentStatus !==
+            "Paid"
+          ) {
+
+            throw new Error(
+              "Payment was verified, but the order was not marked as Paid."
+            );
+
+          }
+
+
+          console.log(
+            "ORDER PAYMENT VERIFIED:",
+            existingOrder._id
+          );
+
+
+          // ========================================
+          // SAVE COMPLETED PAYMENT
+          // ========================================
+
+          localStorage.setItem(
+
+            "completedPayment",
+
+            JSON.stringify({
+
+              reference,
+
+              orderId:
+                existingOrder._id
+
+            })
+
+          );
+
+
+          // ========================================
+          // REMOVE PENDING ORDER
+          // ========================================
+
+          localStorage.removeItem(
+            "pendingOrder"
+          );
+
+
+          // ========================================
+          // CLEAR CART
+          // ========================================
+
+          localStorage.removeItem(
+            "cart"
+          );
+
+
+          // ========================================
+          // UPDATE CART COUNT
+          // ========================================
+
+          window.dispatchEvent(
+            new Event(
+              "cartUpdated"
+            )
+          );
+
+
+          // ========================================
+          // SHOW SUCCESS PAGE
+          // ========================================
+
+          setStatus(
+            "success"
+          );
+
 
           showToast(
-            "Payment was cancelled. Your order has not been paid.",
-            "error",
+            "Payment successful and order updated!",
+            "success"
           );
 
-          return;
-        }
 
-        // ========================================
-        // PAYMENT NOT SUCCESSFUL YET
-        // ========================================
+          // ========================================
+          // WAIT 3 SECONDS
+          // THEN GO TO ORDER DETAILS
+          // ========================================
 
-        if (paymentStatus !== "success") {
-          throw new Error(
-            `Payment has not been completed. Current status: ${paymentStatus}`,
+          setTimeout(() => {
+
+            navigate(
+              `/account/orders/${existingOrder._id}`
+            );
+
+          }, 3000);
+
+
+        } catch (error) {
+
+          console.error(
+            "PAYMENT PROCESSING ERROR:",
+            error
           );
-        }
 
-        // ========================================
-        // GET PENDING ORDER
-        // ========================================
 
-        const savedOrder = localStorage.getItem("pendingOrder");
-
-        if (!savedOrder) {
-          throw new Error("Pending order information was not found.");
-        }
-
-        const pendingOrder = JSON.parse(savedOrder);
-
-        console.log("PENDING ORDER:", pendingOrder);
-
-        // ========================================
-        // GET EXISTING ORDER ID
-        // ========================================
-
-        const orderId = pendingOrder.orderId;
-
-        if (!orderId) {
-          throw new Error("Order ID was not found.");
-        }
-
-        // ========================================
-        // FIND EXISTING ORDER
-        // ========================================
-
-        const existingOrder = await getOrderById(orderId);
-
-        console.log("EXISTING ORDER:", existingOrder);
-
-        if (!existingOrder || !existingOrder._id) {
-          throw new Error("Existing order could not be found.");
-        }
-
-        // ========================================
-        // CHECK PAYMENT REFERENCE
-        // ========================================
-
-        if (existingOrder.paymentReference !== reference) {
-          throw new Error("Payment reference does not match the order.");
-        }
-
-        // ========================================
-        // CHECK ORDER PAYMENT STATUS
-        // ========================================
-
-        if (existingOrder.paymentStatus !== "Paid") {
-          throw new Error(
-            "Payment was verified, but the order was not marked as Paid.",
+          setStatus(
+            "failed"
           );
+
+
+          showToast(
+            error.message ||
+              "Payment verification failed.",
+            "error"
+          );
+
         }
 
-        console.log("ORDER PAYMENT VERIFIED:", existingOrder._id);
+      };
 
-        // ========================================
-        // SAVE COMPLETED PAYMENT
-        // ========================================
-
-        localStorage.setItem(
-          "completedPayment",
-
-          JSON.stringify({
-            reference,
-
-            orderId: existingOrder._id,
-          }),
-        );
-
-        // ========================================
-        // REMOVE PENDING ORDER
-        // ========================================
-
-        localStorage.removeItem("pendingOrder");
-
-        // ========================================
-        // CLEAR CART
-        // ========================================
-
-        localStorage.removeItem("cart");
-
-        // ========================================
-        // UPDATE NAVBAR CART COUNT
-        // ========================================
-
-        window.dispatchEvent(new Event("cartUpdated"));
-
-        // ========================================
-        // SUCCESS
-        // ========================================
-
-        setStatus("success");
-
-        showToast("Payment successful and order updated!", "success");
-
-        // ========================================
-        // GO TO ORDER DETAILS
-        // ========================================
-
-        setTimeout(() => {
-          navigate(`/account/orders/${existingOrder._id}`);
-        }, 3000);
-      } catch (error) {
-        console.error("PAYMENT PROCESSING ERROR:", error);
-
-        setStatus("failed");
-
-        showToast(error.message || "Payment verification failed.", "error");
-      }
-    };
 
     checkPayment();
-  }, [searchParams, showToast, navigate]);
+
+
+  }, [
+    searchParams,
+    showToast,
+    navigate
+  ]);
+
 
   // ========================================
-  // VERIFYING
+  // VERIFYING PAYMENT
   // ========================================
 
-  if (status === "verifying") {
+  if (
+    status ===
+    "verifying"
+  ) {
+
     return (
+
       <>
-        <Navbar products={searchProducts} />
 
-        <main className="payment-callback-page">
-          <div className="payment-callback-container">
-            <div className="payment-callback-icon">🔄</div>
+        <Navbar
+          products={
+            searchProducts
+          }
+        />
 
-            <h1>Verifying Payment</h1>
+
+        <main
+          className="payment-callback-page"
+        >
+
+          <div
+            className="payment-callback-container"
+          >
+
+            <div
+              className="payment-callback-icon"
+            >
+              🔄
+            </div>
+
+
+            <h1>
+              Verifying Payment
+            </h1>
+
 
             <p>
-              Please wait while we confirm your payment and update your order.
+              Please wait while we confirm
+              your payment and update your order.
             </p>
+
           </div>
+
         </main>
 
+
         <Footer />
+
       </>
+
     );
+
   }
 
+
   // ========================================
-  // SUCCESS
+  // PAYMENT SUCCESSFUL
   // ========================================
 
-  if (status === "success") {
+  if (
+    status ===
+    "success"
+  ) {
+
     return (
+
       <>
-        <Navbar products={searchProducts} />
 
-        <main className="payment-callback-page">
-          <div className="payment-callback-container">
-            <div className="payment-callback-icon">✅</div>
+        <Navbar
+          products={
+            searchProducts
+          }
+        />
 
-            <h1>Payment Successful</h1>
+
+        <main
+          className="payment-callback-page"
+        >
+
+          <div
+            className="payment-callback-container"
+          >
+
+            <div
+              className="payment-callback-icon"
+            >
+              ✅
+            </div>
+
+
+            <h1>
+              Payment Successful
+            </h1>
+
 
             <p>
-              Your payment has been successfully verified and your order has
-              been updated.
+              Your payment has been successfully
+              verified and your order has been updated.
             </p>
+
 
             <button
               className="payment-callback-btn"
-              onClick={() => navigate("/account/orders")}
+              onClick={() =>
+                navigate(
+                  "/account/orders"
+                )
+              }
             >
               View My Orders
             </button>
+
           </div>
+
         </main>
 
+
         <Footer />
+
       </>
+
     );
+
   }
 
+
   // ========================================
-  // CANCELLED
+  // PAYMENT CANCELLED
   // ========================================
 
-  if (status === "cancelled") {
+  if (
+    status ===
+    "cancelled"
+  ) {
+
     return (
+
       <>
-        <Navbar products={searchProducts} />
 
-        <main className="payment-callback-page">
-          <div className="payment-callback-container">
-            <div className="payment-callback-icon">⚠️</div>
+        <Navbar
+          products={
+            searchProducts
+          }
+        />
 
-            <h1>Payment Cancelled</h1>
 
-            <p>Your payment was cancelled. Your order has not been paid.</p>
+        <main
+          className="payment-callback-page"
+        >
+
+          <div
+            className="payment-callback-container"
+          >
+
+            <div
+              className="payment-callback-icon"
+            >
+              ⚠️
+            </div>
+
+
+            <h1>
+              Payment Cancelled
+            </h1>
+
+
+            <p>
+              Your payment was cancelled.
+              Your order has not been paid.
+            </p>
+
 
             <button
               className="payment-callback-btn"
-              onClick={() => navigate("/checkout")}
+              onClick={() =>
+                navigate(
+                  "/checkout"
+                )
+              }
             >
               Return to Checkout
             </button>
+
           </div>
+
         </main>
 
+
         <Footer />
+
       </>
+
     );
+
   }
 
+
   // ========================================
-  // FAILED
+  // PAYMENT FAILED
   // ========================================
 
   return (
+
     <>
-      <Navbar products={searchProducts} />
 
-      <main className="payment-callback-page">
-        <div className="payment-callback-container">
-          <div className="payment-callback-icon">❌</div>
+      <Navbar
+        products={
+          searchProducts
+        }
+      />
 
-          <h1>Payment Failed</h1>
 
-          <p>We were unable to confirm your payment.</p>
+      <main
+        className="payment-callback-page"
+      >
+
+        <div
+          className="payment-callback-container"
+        >
+
+          <div
+            className="payment-callback-icon"
+          >
+            ❌
+          </div>
+
+
+          <h1>
+            Payment Failed
+          </h1>
+
+
+          <p>
+            We were unable to confirm your payment.
+          </p>
+
 
           <button
             className="payment-callback-btn"
-            onClick={() => navigate("/checkout")}
+            onClick={() =>
+              navigate(
+                "/checkout"
+              )
+            }
           >
             Return to Checkout
           </button>
+
         </div>
+
       </main>
 
+
       <Footer />
+
     </>
+
   );
+
 }
+
 
 export default PaymentCallback;

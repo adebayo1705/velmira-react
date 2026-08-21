@@ -1,147 +1,82 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import ScrollToTop from "./components/layouts/ScrollToTop";
 
-import ScrollToTop
-  from "./components/layouts/ScrollToTop";
+import ProtectedRoute from "./components/layouts/ProtectedRoute";
 
-import ProtectedRoute
-  from "./components/layouts/ProtectedRoute";
+import AdminRoute from "./components/layouts/AdminRoute";
 
-import AdminRoute
-  from "./components/layouts/AdminRoute";
+import Admin from "./pages/Admin";
 
+import AdminUsers from "./pages/admin/AdminUsers";
 
-import Admin
-  from "./pages/Admin";
+import AdminProducts from "./pages/admin/AdminProducts";
 
-import AdminUsers
-  from "./pages/admin/AdminUsers";
+import AdminAddProduct from "./pages/admin/AdminAddProduct";
 
-import AdminProducts
-  from "./pages/admin/AdminProducts";
+import AdminEditProduct from "./pages/admin/AdminEditProduct";
 
-import AdminAddProduct
-  from "./pages/admin/AdminAddProduct";
-
-import AdminEditProduct
-  from "./pages/admin/AdminEditProduct";
-
-import AdminOrders
-  from "./pages/admin/AdminOrders";
+import AdminOrders from "./pages/admin/AdminOrders";
 
 import PaymentCallback from "./pages/PaymentCallback";
 
+import Login from "./pages/Login";
 
-import Login
-  from "./pages/Login";
+import Register from "./pages/Register";
 
-import Register
-  from "./pages/Register";
+import Home from "./pages/Home";
 
+import Shop from "./pages/Shop";
 
-import Home
-  from "./pages/Home";
+import Cart from "./pages/Cart";
 
-import Shop
-  from "./pages/Shop";
+import Checkout from "./pages/Checkout";
 
-import Cart
-  from "./pages/Cart";
+import Wishlist from "./pages/Wishlist";
 
-import Checkout
-  from "./pages/Checkout";
+import About from "./pages/About";
 
-import Wishlist
-  from "./pages/Wishlist";
+import Contact from "./pages/Contact";
 
-import About
-  from "./pages/About";
+import Account from "./pages/Account";
 
-import Contact
-  from "./pages/Contact";
-
-import Account
-  from "./pages/Account";
-
-import OrderDetails
-  from "./pages/OrderDetails";
-
+import OrderDetails from "./pages/OrderDetails";
 
 function App() {
-
   return (
-
     <BrowserRouter>
-
       <ScrollToTop />
 
-
       <Routes>
-
-
         {/* ============================
             HOME
         ============================ */}
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Route path="/" element={<Home />} />
 
-        <Route
-          path="/home"
-          element={<Home />}
-        />
-
+        <Route path="/home" element={<Home />} />
 
         {/* ============================
             SHOP
         ============================ */}
 
-        <Route
-          path="/shop"
-          element={<Shop />}
-        />
+        <Route path="/shop" element={<Shop />} />
 
-        <Route
-          path="/cart"
-          element={<Cart />}
-        />
+        <Route path="/cart" element={<Cart />} />
 
-        <Route
-          path="/wishlist"
-          element={<Wishlist />}
-        />
+        <Route path="/wishlist" element={<Wishlist />} />
 
-        <Route
-          path="/about"
-          element={<About />}
-        />
+        <Route path="/about" element={<About />} />
 
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
-
+        <Route path="/contact" element={<Contact />} />
 
         {/* ============================
             AUTHENTICATION
         ============================ */}
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-
+        <Route path="/register" element={<Register />} />
 
         {/* ============================
             PROTECTED ACCOUNT
@@ -150,16 +85,11 @@ function App() {
         <Route
           path="/account"
           element={
-
             <ProtectedRoute>
-
               <Account />
-
             </ProtectedRoute>
-
           }
         />
-
 
         {/* ============================
             PROTECTED CHECKOUT
@@ -168,16 +98,11 @@ function App() {
         <Route
           path="/checkout"
           element={
-
             <ProtectedRoute>
-
               <Checkout />
-
             </ProtectedRoute>
-
           }
         />
-
 
         {/* ============================
             PROTECTED ORDER DETAILS
@@ -186,16 +111,11 @@ function App() {
         <Route
           path="/account/orders/:orderId"
           element={
-
             <ProtectedRoute>
-
               <OrderDetails />
-
             </ProtectedRoute>
-
           }
         />
-
 
         {/* ============================
             ADMIN DASHBOARD
@@ -204,16 +124,11 @@ function App() {
         <Route
           path="/admin"
           element={
-
             <AdminRoute>
-
               <Admin />
-
             </AdminRoute>
-
           }
         />
-
 
         {/* ============================
             ADMIN PRODUCTS
@@ -222,16 +137,11 @@ function App() {
         <Route
           path="/admin/products"
           element={
-
             <AdminRoute>
-
               <AdminProducts />
-
             </AdminRoute>
-
           }
         />
-
 
         {/* ============================
             ADMIN ORDERS
@@ -240,16 +150,11 @@ function App() {
         <Route
           path="/admin/orders"
           element={
-
             <AdminRoute>
-
               <AdminOrders />
-
             </AdminRoute>
-
           }
         />
-
 
         {/* ============================
             ADMIN USERS
@@ -258,16 +163,11 @@ function App() {
         <Route
           path="/admin/users"
           element={
-
             <AdminRoute>
-
               <AdminUsers />
-
             </AdminRoute>
-
           }
         />
-
 
         {/* ============================
             ADMIN ADD PRODUCT
@@ -276,16 +176,11 @@ function App() {
         <Route
           path="/admin/products/add"
           element={
-
             <AdminRoute>
-
               <AdminAddProduct />
-
             </AdminRoute>
-
           }
         />
-
 
         {/* ============================
             ADMIN EDIT PRODUCT
@@ -294,28 +189,16 @@ function App() {
         <Route
           path="/admin/products/edit/:id"
           element={
-
             <AdminRoute>
-
               <AdminEditProduct />
-
             </AdminRoute>
-
           }
         />
 
-<Route
-  path="/payment/callback"
-  element={<PaymentCallback />}
-/>
-
+        <Route path="/payment/callback" element={<PaymentCallback />} />
       </Routes>
-
     </BrowserRouter>
-
   );
-
 }
-
 
 export default App;
