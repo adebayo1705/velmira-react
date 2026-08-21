@@ -662,14 +662,8 @@ function Checkout() {
       // OPEN PAYSTACK POPUP
       // ============================================================
 
-      const paystack =
-        new PaystackPop();
-
-
-      paystack.resumeTransaction(
-        accessCode
-      );
-
+window.location.href =
+  payment.data.authorization_url;
 
       // ============================================================
       // NOTE:
