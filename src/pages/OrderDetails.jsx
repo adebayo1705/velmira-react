@@ -496,14 +496,8 @@ function OrderDetails() {
                   (item) => {
 
                     /*
-                      IMPORTANT:
-
-                      productId is now the
+                      productId is the
                       populated product object.
-
-                      We no longer need to
-                      search through all
-                      products.
                     */
 
                     const product =
@@ -519,6 +513,29 @@ function OrderDetails() {
                       );
 
 
+                    /*
+                      FIX PRODUCT IMAGE URL
+
+                      Database currently stores:
+
+                      /velmira-react/images/products/watch1.jpg
+
+                      But Vite public files are served from:
+
+                      /images/products/watch1.jpg
+
+                      So remove the old
+                      /velmira-react prefix.
+                    */
+
+                    const productImage =
+                      product?.image
+                        ?.replace(
+                          /^\/velmira-react/,
+                          ""
+                        );
+
+
                     return (
 
                       <div
@@ -527,22 +544,35 @@ function OrderDetails() {
                       >
 
 
-                        {/* PRODUCT IMAGE */}
+                        {/* ============================
+                            PRODUCT IMAGE
+                        ============================ */}
 
                         <div
                           className="receipt-product-image"
                         >
 
-                          {product?.image ? (
+                          {productImage ? (
 
                             <img
                               src={
-                                product.image
+                                productImage
                               }
                               alt={
                                 product.name ||
                                 "Product"
                               }
+                              onError={(e) => {
+
+                                console.error(
+                                  "PRODUCT IMAGE FAILED:",
+                                  productImage
+                                );
+
+                                e.currentTarget.style.display =
+                                  "none";
+
+                              }}
                             />
 
                           ) : (
@@ -558,7 +588,9 @@ function OrderDetails() {
                         </div>
 
 
-                        {/* PRODUCT DETAILS */}
+                        {/* ============================
+                            PRODUCT DETAILS
+                        ============================ */}
 
                         <div
                           className="receipt-product-details"
@@ -590,7 +622,9 @@ function OrderDetails() {
                         </div>
 
 
-                        {/* PRODUCT PRICE */}
+                        {/* ============================
+                            PRODUCT PRICE
+                        ============================ */}
 
                         <div
                           className="receipt-product-price"
@@ -618,6 +652,7 @@ function OrderDetails() {
                           </strong>
 
                         </div>
+
 
                       </div>
 
@@ -783,6 +818,7 @@ function OrderDetails() {
             </Link>
 
           </div>
+
 
         </div>
 

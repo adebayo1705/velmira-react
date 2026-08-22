@@ -49,6 +49,35 @@ function AdminOrders() {
 
 
   // ============================
+  // IMAGE URL
+  // ============================
+
+  const getImageUrl = (image) => {
+
+    if (!image) {
+      return "";
+    }
+
+
+    // Full external image URL
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+      return image;
+    }
+
+
+    // Remove old /velmira-react prefix
+    return image.replace(
+      /^\/velmira-react/,
+      ""
+    );
+
+  };
+
+
+  // ============================
   // GET ORDERS
   // ============================
 
@@ -848,7 +877,9 @@ function AdminOrders() {
 
                                 <img
                                   src={
-                                    item.productId.image
+                                    getImageUrl(
+                                      item.productId.image
+                                    )
                                   }
                                   alt={
                                     item.productId.name ||
